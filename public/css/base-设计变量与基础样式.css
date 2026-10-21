@@ -1,0 +1,310 @@
+/* ==========================================================================
+   文件作用：设计变量 + 基础样式（所有页面最先加载的样式表）
+   --------------------------------------------------------------------------
+   这一层只做三件事：
+     1. 用 CSS 变量统一定义颜色、字号、间距、圆角 —— 改一处，全站生效；
+     2. 清除浏览器默认样式，让各浏览器起点一致；
+     3. 定义标题、正文、按钮、表单这些"原子"级别的基础样式。
+
+   为什么先学变量？因为后面 components 和 pages 两层都会用到 var(--xxx)。
+   换个主色只需要改 --accent 一行，这就是设计系统的最小雏形。
+
+   对应考核点：3.9 响应式（相对单位）、3.2 导航与整体视觉
+   ========================================================================== */
+
+/* ---------- 1. 设计变量 ---------- */
+:root {
+  /* 颜色：暖白纸感 + 柿子色点缀，避免"模板蓝" */
+  --bg: #fbf8f3;
+  --bg-soft: #f4efe6;
+  --surface: #fffdfa;
+  --surface-2: #f8f4ec;
+  --ink: #23201c;
+  --ink-2: #4a443c;
+  --muted: #857c70;
+  --line: #e7dfd2;
+  --line-strong: #d8cebd;
+  --accent: #c2542b;
+  --accent-dark: #a6431f;
+  --accent-soft: #f6e4d9;
+  --success: #3f7d5a;
+  --success-soft: #e4efe7;
+  --warn: #a8701b;
+  --warn-soft: #f8eed7;
+  --danger: #b03a34;
+
+  /* 字号：用 clamp 做流式排版，缩放窗口时自动变大变小，不需要写一堆媒体查询 */
+  --fs-display: clamp(2rem, 1.2rem + 3.2vw, 3.6rem);
+  --fs-h1: clamp(1.6rem, 1.2rem + 1.6vw, 2.4rem);
+  --fs-h2: clamp(1.25rem, 1.1rem + 0.7vw, 1.65rem);
+  --fs-h3: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+  --fs-body: clamp(0.95rem, 0.92rem + 0.12vw, 1.05rem);
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.78rem;
+
+  /* 间距：以 4px 为基准的节奏，页面不会忽大忽小 */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
+
+  /* 阴影用带色相的柔和阴影，比纯黑更"贵"一点 */
+  --shadow-sm: 0 1px 2px rgba(66, 50, 32, 0.06);
+  --shadow: 0 10px 30px -18px rgba(66, 50, 32, 0.45);
+  --shadow-lg: 0 30px 60px -30px rgba(66, 50, 32, 0.5);
+
+  --container: 1180px;
+  --header-h: 68px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---------- 2. 重置 ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* 让 width 包含 padding 和 border，算尺寸不头疼 */
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", "Source Han Sans SC", system-ui, -apple-system, sans-serif;
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 图片一律先"占好位置"，避免加载时页面跳动 */
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+/* ---------- 3. 排版 ---------- */
+/* 标题用衬线体，正文用无衬线，形成"杂志感"的对比 */
+.display,
+.h1,
+.h2,
+.h3 {
+  font-family: "Songti SC", "SimSun", "Noto Serif SC", "Source Han Serif SC", serif;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+}
+
+.display { font-size: var(--fs-display); }
+.h1 { font-size: var(--fs-h1); }
+.h2 { font-size: var(--fs-h2); }
+.h3 { font-size: var(--fs-h3); }
+
+.text-muted { color: var(--muted); }
+.text-accent { color: var(--accent); }
+.text-sm { font-size: var(--fs-sm); }
+.text-xs { font-size: var(--fs-xs); }
+
+/* 价格：数字用等宽字体，小数点对齐、变化时不抖动 */
+.price {
+  font-family: "DIN Alternate", "Menlo", "Consolas", monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.price-currency {
+  font-size: 0.72em;
+  margin-right: 0.1em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.price-strike {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  text-decoration: line-through;
+  font-family: "Menlo", "Consolas", monospace;
+}
+
+/* ---------- 4. 按钮 ---------- */
+.btn {
+  --btn-bg: var(--surface);
+  --btn-ink: var(--ink);
+  --btn-line: var(--line-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.62em 1.15em;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--btn-line);
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  transition: transform 0.16s var(--ease), background-color 0.16s var(--ease), border-color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+/* 主按钮：柿子色实心，整页只出现 1~2 个，视觉焦点才明确 */
+.btn-primary {
+  --btn-bg: var(--accent);
+  --btn-ink: #fff;
+  --btn-line: var(--accent);
+}
+
+.btn-primary:hover {
+  --btn-bg: var(--accent-dark);
+  --btn-line: var(--accent-dark);
+}
+
+.btn-ghost {
+  --btn-bg: transparent;
+  --btn-line: var(--line-strong);
+}
+
+.btn-ghost:hover {
+  --btn-bg: var(--surface);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-lg {
+  padding: 0.8em 1.6em;
+  font-size: 1rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 键盘 Tab 时要有清晰的焦点框（无障碍基本要求） */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---------- 5. 表单 ---------- */
+.input,
+.select {
+  width: 100%;
+  padding: 0.6em 0.9em;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  transition: border-color 0.16s var(--ease), box-shadow 0.16s var(--ease);
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(194, 84, 43, 0.12);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field-label {
+  font-size: var(--fs-xs);
+  color: var(--ink-2);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- 6. 工具类 ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* 尊重系统设置：用户开启"减少动态效果"时关掉动画 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

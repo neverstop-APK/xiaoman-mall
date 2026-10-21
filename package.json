@@ -1,0 +1,21 @@
+{
+  "name": "xiaoman-mall",
+  "version": "1.0.0",
+  "private": true,
+  "description": "小满商城 —— 云屋三面前端（+AI Agent 开发）项目考核：原生三件套 + 零依赖 Node 后端",
+  "main": "server/index-服务入口.js",
+  "scripts": {
+    "start": "node server/index-服务入口.js",
+    "dev": "node --watch server/index-服务入口.js",
+    "covers": "node scripts/gen-covers-生成商品封面.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "mall",
+    "vanilla-js",
+    "node"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,99 @@
+/* ==========================================================================
+   文件作用：补充样式 —— 结算弹窗里的金额明细 + 加入购物车成功后的反馈
+   --------------------------------------------------------------------------
+   为什么单独一个文件？
+   因为这两块是"写首页 HTML 时才补出来的零件"，
+   单独放一个文件，方便对照"页面需要什么，样式就补什么"这个过程。
+
+   对应考核点：3.7 购物车金额、3.8 提交订单
+   ========================================================================== */
+
+/* ---------- 1. 结算弹窗：金额明细 ---------- */
+.checkout-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.checkout-box .line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+
+.checkout-box .line.total {
+  margin-top: 0.2rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.checkout-box .line .amount {
+  font-family: var(--font-mono, "Menlo", "Consolas", monospace);
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.checkout-box p {
+  margin: 0.15rem 0 0;
+}
+
+/* ---------- 2. 加入购物车成功：按钮短暂变成对勾 ---------- */
+.add-btn.is-added {
+  background: var(--success);
+  border-color: var(--success);
+  color: #fff;
+  transform: scale(1.06);
+}
+
+.add-btn.is-added svg {
+  animation: pop-in 0.32s var(--ease);
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.4); opacity: 0; }
+  70% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .add-btn.is-added svg { animation: none; }
+}
+
+/* ---------- 3. 订单卡片底部的操作按钮 ---------- */
+.order-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.order-actions .btn {
+  padding: 0.45em 1.1em;
+  font-size: var(--fs-sm);
+}
+
+.order-hero-actions .btn {
+  padding: 0.5em 1.1em;
+  font-size: var(--fs-sm);
+}
+
+@media (max-width: 640px) {
+  .order-actions {
+    justify-content: stretch;
+  }
+  .order-actions .btn {
+    flex: 1 1 120px;
+  }
+}

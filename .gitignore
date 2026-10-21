@@ -1,0 +1,12 @@
+# 依赖与系统文件
+node_modules/
+.DS_Store
+Thumbs.db
+
+# 日志与本地验收脚本（不提交）
+*.log
+.verify/
+
+# 运行时生成的数据：购物车、订单。首次写入时程序会自动创建
+server/data/carts-*.json
+server/data/orders-*.json

@@ -1,0 +1,780 @@
+/* ==========================================================================
+   文件作用：组件层 —— 页面上反复出现的"零件"
+   --------------------------------------------------------------------------
+   这里放商品卡片、筛选标签、侧拉购物车、Toast、弹窗、分页、空状态。
+   这些零件首页、详情页、订单页都会用到，所以单独一层，避免样式重复。
+
+   对应考核点：3.3 商品卡片、3.5 筛选项、3.7 侧拉购物车、3.8 结果反馈
+   ========================================================================== */
+
+/* ---------- 1. 商品卡片 ---------- */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.24s var(--ease), box-shadow 0.24s var(--ease), border-color 0.24s var(--ease);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
+}
+
+.card-media {
+  position: relative;
+  display: block;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+/* aspect-ratio 先占好位置，图片加载完不会把布局顶开 */
+.card-media img {
+  width: 100%;
+  /* HTML 里写了 width/height 属性，这里必须改回 auto，aspect-ratio 才会生效 */
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease);
+}
+
+.card:hover .card-media img {
+  transform: scale(1.04);
+}
+
+/* 库存角标：绝对定位在图片左上角 */
+.stock-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 2px 9px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: rgba(35, 32, 28, 0.72);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+.stock-tag.is-low {
+  background: rgba(168, 112, 27, 0.9);
+}
+
+.stock-tag.is-out {
+  background: rgba(35, 32, 28, 0.55);
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.85rem 0.95rem 1rem;
+  flex: 1;
+}
+
+.card-cat {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.card-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.45;
+  /* 超长标题最多两行，省略号收尾，卡片高度才整齐 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-summary {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.15rem;
+}
+
+.tag {
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.price-row .price {
+  font-size: 1.18rem;
+  color: var(--accent);
+}
+
+/* 卡片上的"加入购物车"圆形按钮 */
+.add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  transition: background-color 0.18s var(--ease), color 0.18s var(--ease), border-color 0.18s var(--ease), transform 0.18s var(--ease);
+}
+
+.add-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.add-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: scale(1.06);
+}
+
+.add-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ---------- 2. 筛选标签 / 工具条 ---------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  margin-bottom: var(--space-5);
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  padding: 0.35em 0.9em;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  transition: all 0.16s var(--ease);
+  white-space: nowrap;
+}
+
+.chip:hover {
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+/* 选中的筛选项：实心 + 白字，一眼能看出"当前在看什么" */
+.chip[aria-pressed="true"],
+.chip.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.chip .chip-count {
+  opacity: 0.55;
+  margin-left: 0.25em;
+  font-weight: 400;
+}
+
+.filter-spacer {
+  flex: 1 1 auto;
+}
+
+.filter-result {
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.filter-result strong {
+  color: var(--ink);
+  font-family: "Menlo", "Consolas", monospace;
+}
+
+/* 排序下拉框：不要占满一行，跟在筛选标签后面 */
+.filter-select {
+  width: auto;
+  min-width: 150px;
+  max-width: 190px;
+  padding-block: 0.42em;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+/* ---------- 3. 分类入口卡片 ---------- */
+.category-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(160deg, var(--surface), var(--surface-2));
+  transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow);
+}
+
+.category-card .emoji {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.category-card .name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.category-card .meta {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+/* ---------- 4. 侧拉购物车 ---------- */
+.drawer-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(35, 32, 28, 0.4);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.28s var(--ease), visibility 0.28s;
+}
+
+.drawer-mask.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  width: min(420px, 100vw);
+  height: 100dvh; /* dvh 能正确处理手机浏览器地址栏收起 */
+  background: var(--bg);
+  border-left: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  /* 侧拉动画：默认藏在右侧，加上 .is-open 后滑进来 */
+  transform: translateX(100%);
+  transition: transform 0.32s var(--ease);
+}
+
+.drawer.is-open {
+  transform: translateX(0);
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.drawer-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-family: "Songti SC", "SimSun", serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.drawer-title .count {
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain; /* 滚到尽头不要带着页面一起滚 */
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.drawer-foot {
+  padding: var(--space-4) var(--space-5) calc(var(--space-4) + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* 购物车里的每一行 */
+.cart-item {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px dashed var(--line);
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+
+.cart-item-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.cart-item-name {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cart-item-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.1rem;
+}
+
+/* 步进器 + 小计：贴在卡片底部，和上方的"单价 / 删除"分开 */
+.cart-item-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.cart-item-foot .cart-item-price {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cart-item-price {
+  font-family: "Menlo", "Consolas", monospace;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+}
+
+.cart-remove {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.16s var(--ease), background-color 0.16s var(--ease);
+}
+
+.cart-remove:hover {
+  color: var(--danger);
+  background: rgba(176, 58, 52, 0.08);
+}
+
+/* 数量步进器 */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.stepper button {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-2);
+  font-size: 1rem;
+  line-height: 1;
+  transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.stepper button:hover:not(:disabled) {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.stepper button:disabled {
+  color: var(--line-strong);
+  cursor: not-allowed;
+}
+
+.stepper input {
+  width: 34px;
+  border: none;
+  background: none;
+  text-align: center;
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  padding: 0;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.stepper input::-webkit-outer-spin-button,
+.stepper input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 合计行 */
+.total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.total-row .label {
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.total-row .amount {
+  font-family: "DIN Alternate", "Menlo", "Consolas", monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.drawer-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* ---------- 5. Toast：操作反馈，3 秒后自动消失 ---------- */
+.toast-stack {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 100;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  pointer-events: none;
+  width: min(92vw, 420px);
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  color: #fff;
+  font-size: var(--fs-sm);
+  box-shadow: var(--shadow-lg);
+  animation: toast-in 0.26s var(--ease);
+}
+
+.toast.is-error {
+  background: var(--danger);
+}
+
+.toast.is-success {
+  background: var(--success);
+}
+
+.toast.is-leaving {
+  animation: toast-out 0.22s var(--ease) forwards;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(8px) scale(0.96); }
+}
+
+/* ---------- 6. 弹窗（结算表单） ---------- */
+.modal-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(35, 32, 28, 0.45);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.24s var(--ease), visibility 0.24s;
+}
+
+.modal-wrap.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  width: min(520px, 100%);
+  max-height: min(86dvh, 720px);
+  overflow-y: auto;
+  background: var(--bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.26s var(--ease);
+}
+
+.modal-wrap.is-open .modal {
+  transform: none;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-body {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.modal-foot {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+}
+
+/* ---------- 7. 分页 ---------- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  min-width: 36px;
+  height: 36px;
+  padding-inline: 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  transition: all 0.16s var(--ease);
+}
+
+.page-btn:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.page-btn[aria-current="page"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- 8. 空状态 / 加载骨架 ---------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: clamp(2rem, 6vw, 4rem) var(--space-4);
+  text-align: center;
+  color: var(--muted);
+}
+
+.empty .empty-emoji {
+  font-size: 2.2rem;
+  filter: grayscale(0.3);
+}
+
+.empty .empty-title {
+  font-size: 1rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.skeleton {
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--surface-2) 25%, #efe8dc 37%, var(--surface-2) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.skeleton-card {
+  height: 300px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+/* ---------- 9. 面包屑 ---------- */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  padding-block: var(--space-4);
+}
+
+.breadcrumb a {
+  transition: color 0.16s var(--ease);
+}
+
+.breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.breadcrumb .sep {
+  opacity: 0.5;
+}
+
+/* ---------- 10. 评分星 ---------- */
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: var(--fs-xs);
+  color: var(--warn);
+  font-weight: 600;
+}
+
+.rating svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ---------- 11. 状态徽标 ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+}
+
+.badge.is-ok {
+  background: var(--success-soft);
+  border-color: transparent;
+  color: var(--success);
+}
+
+.badge.is-warn {
+  background: var(--warn-soft);
+  border-color: transparent;
+  color: var(--warn);
+}
+
+.badge.is-accent {
+  background: var(--accent-soft);
+  border-color: transparent;
+  color: var(--accent-dark);
+}

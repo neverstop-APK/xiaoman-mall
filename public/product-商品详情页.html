@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>商品详情 · 小满商城</title>
+  <meta name="description" content="小满商城商品详情页：图片、价格、介绍、分类、库存状态与加入购物车。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><circle cx=%2216%22 cy=%2216%22 r=%229%22 fill=%22%23c2542b%22/></svg>">
+  <link rel="stylesheet" href="./css/base-设计变量与基础样式.css">
+  <link rel="stylesheet" href="./css/layout-导航与页面布局.css">
+  <link rel="stylesheet" href="./css/components-通用组件样式.css">
+  <link rel="stylesheet" href="./css/pages-各页面专属样式.css">
+  <link rel="stylesheet" href="./css/extra-结算与补充样式.css">
+</head>
+<body>
+  <!-- ===== 顶部导航 ===== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index-首页.html" aria-label="小满商城首页">
+        <span class="brand-dot" aria-hidden="true"></span>小满
+      </a>
+
+      <nav class="nav" aria-label="主导航">
+        <a class="icon-btn nav-link" href="./index-首页.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+          <span class="icon-label">首页</span>
+        </a>
+        <a class="icon-btn nav-link" href="./index-首页.html#list">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg>
+          <span class="icon-label">全部商品</span>
+        </a>
+        <a class="icon-btn nav-link" href="./orders-我的订单页.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg>
+          <span class="icon-label">我的订单</span>
+        </a>
+      </nav>
+
+      <form class="header-search" id="searchForm" role="search">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input id="searchInput" type="search" name="keyword" placeholder="搜耳机、键盘、杯子…" autocomplete="off" aria-label="搜索商品">
+        <button class="btn btn-primary" type="submit" style="padding:0.35em 0.9em">搜索</button>
+      </form>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="cartOpenBtn" type="button" aria-label="打开购物车" aria-controls="cartDrawer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+          <span class="icon-label">购物车</span>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <nav class="breadcrumb" aria-label="面包屑">
+      <a href="./index-首页.html">首页</a>
+      <span aria-hidden="true">/</span>
+      <a href="./index-首页.html#list">全部商品</a>
+      <span aria-hidden="true">/</span>
+      <span id="crumbName" aria-current="page">商品详情</span>
+    </nav>
+
+    <!-- 加载失败时显示这一块，正常时它带 hidden -->
+    <section class="empty" id="errorBox" hidden>
+      <span class="empty-emoji" aria-hidden="true">🧭</span>
+      <span class="empty-title" id="errorTitle">商品不见了</span>
+      <span class="text-sm" id="errorText">链接可能写错了，或者商品已经下架。</span>
+      <a class="btn btn-ghost" href="./index-首页.html#list">回到商品列表</a>
+    </section>
+
+    <div class="detail-layout" id="detailLayout" aria-busy="true">
+      <div class="detail-gallery">
+        <img id="productCover" src="" alt="" width="800" height="600">
+      </div>
+
+      <div class="detail-info">
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="badge" id="categoryBadge">分类</span>
+          <span class="badge is-ok" id="stockBadge">有货</span>
+        </div>
+
+        <h1 class="detail-title" id="productName">正在加载…</h1>
+        <p class="text-muted" id="productSummary"></p>
+
+        <div class="detail-meta">
+          <span id="metaBrand">品牌</span>
+          <span aria-hidden="true">·</span>
+          <span class="rating" id="metaRating">★ 0.0</span>
+          <span aria-hidden="true">·</span>
+          <span id="metaSales">已售 0</span>
+          <span aria-hidden="true">·</span>
+          <span id="metaId">编号</span>
+        </div>
+
+        <div class="detail-price-box">
+          <span class="price" id="productPrice">¥0.00</span>
+          <span class="price-strike" id="productOriginal" hidden></span>
+          <span class="badge is-accent" id="productDiscount" hidden></span>
+        </div>
+
+        <div class="buy-row">
+          <div class="stepper">
+            <button type="button" id="qtyMinus" aria-label="减少数量">−</button>
+            <input id="qtyInput" type="text" inputmode="numeric" value="1" aria-label="购买数量">
+            <button type="button" id="qtyPlus" aria-label="增加数量">+</button>
+          </div>
+          <button class="btn btn-primary btn-lg" id="addToCartBtn" type="button" disabled>加入购物车</button>
+          <button class="btn btn-ghost btn-lg" id="buyNowBtn" type="button" disabled>立即购买</button>
+        </div>
+
+        <p class="text-xs text-muted" id="stockHint">库存状态加载中…</p>
+
+        <dl class="spec-list" id="specList"></dl>
+      </div>
+    </div>
+
+    <section class="detail-section" id="introSection" hidden>
+      <h2 class="h3">商品介绍</h2>
+      <div class="prose" id="productDescription"></div>
+      <ul class="feature-list" id="productFeatures"></ul>
+    </section>
+
+    <section class="detail-section" id="relatedSection" hidden>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">You may also like</p>
+          <h2 class="h3">同类推荐</h2>
+        </div>
+        <a class="btn btn-ghost" href="./index-首页.html#list">全部商品 →</a>
+      </div>
+      <div class="product-grid" id="relatedGrid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <a class="brand" href="./index-首页.html"><span class="brand-dot" aria-hidden="true"></span>小满</a>
+        <p class="footer-note">小满商城是云屋三面前端（+AI Agent 开发）项目考核作品。数据存在服务端的 JSON 文件里，支付为模拟流程，不会产生真实扣款。</p>
+      </div>
+      <nav class="footer-links" aria-label="页脚导航">
+        <a href="./index-首页.html#categories">商品分类</a>
+        <a href="./index-首页.html#list">全部商品</a>
+        <a href="./orders-我的订单页.html">我的订单</a>
+        <a href="./404-页面不存在.html">404 示例</a>
+      </nav>
+    </div>
+  </footer>
+  <div class="drawer-mask" id="cartMask" aria-hidden="true"></div>
+  <aside class="drawer" id="cartDrawer" aria-hidden="true" aria-label="购物车" role="dialog" aria-modal="true">
+    <div class="drawer-head">
+      <h2 class="drawer-title">购物车 <span class="count" id="cartCount">0 件</span></h2>
+      <button class="icon-btn" id="cartCloseBtn" type="button" aria-label="关闭购物车">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <ul id="cartItems" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.75rem"></ul>
+      <div class="empty" id="cartEmpty" hidden>
+        <span class="empty-emoji" aria-hidden="true">🛒</span>
+        <span class="empty-title">购物车还是空的</span>
+        <span class="text-sm">去挑一件顺手的吧，满 99 元包邮</span>
+        <a class="btn btn-ghost" href="./index-首页.html#list">去逛逛</a>
+      </div>
+    </div>
+    <div class="drawer-foot" id="cartFooter" hidden>
+      <div class="total-row">
+        <span class="label">合计（不含运费）</span>
+        <span class="amount" id="cartTotal">¥0.00</span>
+      </div>
+      <div class="drawer-actions">
+        <button class="btn btn-ghost" id="cartClearBtn" type="button">清空</button>
+        <button class="btn btn-primary btn-lg" id="cartCheckoutBtn" type="button">去结算</button>
+      </div>
+    </div>
+  </aside>
+  <div class="modal-wrap" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 class="h3" id="checkoutTitle">确认订单</h2>
+        <button class="icon-btn" id="checkoutCloseBtn" type="button" aria-label="关闭">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <form id="checkoutForm" novalidate>
+        <div class="modal-body">
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">收货人</span>
+              <input class="input" id="receiverName" maxlength="12" value="王小满" required>
+            </label>
+            <label class="field">
+              <span class="field-label">手机号</span>
+              <input class="input" id="receiverPhone" inputmode="numeric" maxlength="11" value="13800001234" required>
+            </label>
+          </div>
+          <label class="field">
+            <span class="field-label">收货地址</span>
+            <input class="input" id="receiverAddress" value="浙江省杭州市西湖区 小满路 1 号 3 幢 201" required>
+          </label>
+          <label class="field">
+            <span class="field-label">备注（选填）</span>
+            <input class="input" id="orderRemark" maxlength="40" placeholder="例如：工作日送货 / 放门口">
+          </label>
+          <div class="checkout-box">
+            <div class="line"><span>商品件数</span><span><strong id="checkoutCount">0</strong> 件</span></div>
+            <div class="line"><span>商品金额</span><span id="checkoutAmount">¥0.00</span></div>
+            <div class="line total"><span>应付金额</span><span class="amount" id="checkoutPayable">¥0.00</span></div>
+            <p class="text-xs text-muted">满 99 元包邮，否则运费 ¥12.00（运费在服务端计算）</p>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" type="button" data-close-checkout>再想想</button>
+          <button class="btn btn-primary" id="checkoutSubmit" type="submit">提交订单并支付</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <script type="module" src="./js/product-详情页逻辑.js"></script>
+</body>
+</html>

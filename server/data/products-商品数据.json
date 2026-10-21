@@ -1,0 +1,838 @@
+[
+  {
+    "id": "p01",
+    "name": "听风 Air One 真无线运动耳机",
+    "brand": "听风",
+    "category": "数码",
+    "subCategory": "耳机",
+    "price": 299,
+    "originalPrice": 359,
+    "stock": 35,
+    "rating": 4.8,
+    "sales": 1293,
+    "emoji": "🎧",
+    "createdAt": "2026-08-02",
+    "tags": [
+      "运动",
+      "蓝牙5.3",
+      "IPX5防水"
+    ],
+    "keywords": [
+      "耳机",
+      "蓝牙耳机",
+      "运动耳机",
+      "跑步",
+      "无线耳机"
+    ],
+    "summary": "跑步不掉的真无线耳机",
+    "description": "耳挂式设计加三点支撑，跑步、跳绳都不会掉。IPX5 防水，出汗和雨天都能正常使用。",
+    "features": [
+      "单耳仅 5.2g，久戴不胀耳",
+      "双麦克风通话降噪",
+      "单次续航 8 小时，配合充电盒 32 小时"
+    ],
+    "cover": "/assets/products/p01-%E5%90%AC%E9%A3%8EAirOne%E7%9C%9F%E6%97%A0%E7%BA%BF%E8%BF%90%E5%8A%A8%E8%80%B3%E6%9C%BA.svg"
+  },
+  {
+    "id": "p02",
+    "name": "听风 Studio 头戴降噪耳机",
+    "brand": "听风",
+    "category": "数码",
+    "subCategory": "耳机",
+    "price": 699,
+    "originalPrice": 899,
+    "stock": 16,
+    "rating": 4.7,
+    "sales": 644,
+    "emoji": "🎧",
+    "createdAt": "2026-07-18",
+    "tags": [
+      "主动降噪",
+      "40h续航",
+      "通勤"
+    ],
+    "keywords": [
+      "耳机",
+      "头戴耳机",
+      "降噪耳机",
+      "通勤"
+    ],
+    "summary": "地铁里也能安静听歌",
+    "description": "混合式主动降噪，最高降低 38dB 环境噪声。支持有线模式，没电了插线继续听。",
+    "features": [
+      "-38dB 混合主动降噪",
+      "40 小时超长续航",
+      "蛋白皮耳罩，可折叠收纳"
+    ],
+    "cover": "/assets/products/p02-%E5%90%AC%E9%A3%8EStudio%E5%A4%B4%E6%88%B4%E9%99%8D%E5%99%AA%E8%80%B3%E6%9C%BA.svg"
+  },
+  {
+    "id": "p03",
+    "name": "木野 Lute 有线 HiFi 耳机",
+    "brand": "木野",
+    "category": "数码",
+    "subCategory": "耳机",
+    "price": 359,
+    "stock": 25,
+    "rating": 4.6,
+    "sales": 318,
+    "emoji": "🎵",
+    "createdAt": "2026-06-30",
+    "tags": [
+      "HiFi",
+      "可换线",
+      "3.5mm"
+    ],
+    "keywords": [
+      "耳机",
+      "有线耳机",
+      "HiFi",
+      "监听"
+    ],
+    "summary": "入门 HiFi 的稳妥选择",
+    "description": "10mm 动圈单元，三频均衡，人声位置靠前。MMCX 可换线接口，坏了只换线就行。",
+    "features": [
+      "10mm 复合振膜动圈",
+      "MMCX 可换线设计",
+      "附送 3 副不同尺寸耳塞"
+    ],
+    "cover": "/assets/products/p03-%E6%9C%A8%E9%87%8ELute%E6%9C%89%E7%BA%BFHiFi%E8%80%B3%E6%9C%BA.svg"
+  },
+  {
+    "id": "p04",
+    "name": "青鸟 Peacock Air 主动降噪耳机",
+    "brand": "青鸟",
+    "category": "数码",
+    "subCategory": "耳机",
+    "price": 499,
+    "stock": 30,
+    "rating": 4.5,
+    "sales": 507,
+    "emoji": "🕊️",
+    "createdAt": "2026-08-11",
+    "tags": [
+      "主动降噪",
+      "通勤",
+      "蓝牙5.2"
+    ],
+    "keywords": [
+      "耳机",
+      "降噪耳机",
+      "无线耳机",
+      "通勤"
+    ],
+    "summary": "500 元档的降噪体验",
+    "description": "轻量半入耳结构，长时间佩戴没有压迫感。降噪深度 28dB，办公室和地铁够用。",
+    "features": [
+      "28dB 主动降噪",
+      "半入耳轻量佩戴",
+      "单次 6 小时续航"
+    ],
+    "cover": "/assets/products/p04-%E9%9D%92%E9%B8%9FPeacockAir%E4%B8%BB%E5%8A%A8%E9%99%8D%E5%99%AA%E8%80%B3%E6%9C%BA.svg"
+  },
+  {
+    "id": "p05",
+    "name": "听风 K87 机械键盘",
+    "brand": "听风",
+    "category": "数码",
+    "subCategory": "键盘",
+    "price": 449,
+    "originalPrice": 529,
+    "stock": 20,
+    "rating": 4.9,
+    "sales": 933,
+    "emoji": "⌨️",
+    "createdAt": "2026-07-25",
+    "tags": [
+      "87键",
+      "茶轴",
+      "热插拔"
+    ],
+    "keywords": [
+      "键盘",
+      "机械键盘",
+      "外接键盘",
+      "办公"
+    ],
+    "summary": "办公与游戏的甜点位",
+    "description": "87 键紧凑布局，茶轴段落感清晰但不吵。支持热插拔，想换轴体不用焊接。",
+    "features": [
+      "87 键紧凑布局，节省桌面空间",
+      "茶轴，段落感清晰",
+      "全键热插拔，附赠拔轴器"
+    ],
+    "cover": "/assets/products/p05-%E5%90%AC%E9%A3%8EK87%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98.svg"
+  },
+  {
+    "id": "p06",
+    "name": "木野 K68 机械键盘",
+    "brand": "木野",
+    "category": "数码",
+    "subCategory": "键盘",
+    "price": 399,
+    "stock": 35,
+    "rating": 4.6,
+    "sales": 771,
+    "emoji": "⌨️",
+    "createdAt": "2026-06-12",
+    "tags": [
+      "68键",
+      "红轴",
+      "便携"
+    ],
+    "keywords": [
+      "键盘",
+      "机械键盘",
+      "便携",
+      "程序员"
+    ],
+    "summary": "小尺寸、好携带",
+    "description": "68 键极简布局，红轴直上直下，敲击轻快。双模连接，笔记本和平板都能用。",
+    "features": [
+      "68 键极简布局",
+      "红轴，轻触发压力",
+      "蓝牙 / 有线双模"
+    ],
+    "cover": "/assets/products/p06-%E6%9C%A8%E9%87%8EK68%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98.svg"
+  },
+  {
+    "id": "p07",
+    "name": "青鸟 K98 机械键盘",
+    "brand": "青鸟",
+    "category": "数码",
+    "subCategory": "键盘",
+    "price": 459,
+    "stock": 12,
+    "rating": 4.4,
+    "sales": 402,
+    "emoji": "⌨️",
+    "createdAt": "2026-08-20",
+    "tags": [
+      "98键",
+      "静音红轴",
+      "三模"
+    ],
+    "keywords": [
+      "键盘",
+      "机械键盘",
+      "静音",
+      "数字键盘"
+    ],
+    "summary": "带数字键区的静音款",
+    "description": "98 键保留了数字键区，会计和做表格的人更顺手。静音红轴，合租宿舍也友好。",
+    "features": [
+      "98 键，保留数字区",
+      "静音红轴，敲击声更小",
+      "蓝牙 / 2.4G / 有线三模"
+    ],
+    "cover": "/assets/products/p07-%E9%9D%92%E9%B8%9FK98%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98.svg"
+  },
+  {
+    "id": "p08",
+    "name": "青鸟 便携蓝牙音箱",
+    "brand": "青鸟",
+    "category": "数码",
+    "subCategory": "音箱",
+    "price": 269,
+    "stock": 28,
+    "rating": 4.3,
+    "sales": 356,
+    "emoji": "🔊",
+    "createdAt": "2026-07-05",
+    "tags": [
+      "IPX7防水",
+      "户外",
+      "10h续航"
+    ],
+    "keywords": [
+      "音箱",
+      "蓝牙音箱",
+      "户外",
+      "音响"
+    ],
+    "summary": "露营时的小声场",
+    "description": "IPX7 级防水，掉进水里捞起来还能用。10 小时续航，一个周末的电量够了。",
+    "features": [
+      "IPX7 防水，可水洗",
+      "10 小时续航",
+      "支持两台音箱串联立体声"
+    ],
+    "cover": "/assets/products/p08-%E9%9D%92%E9%B8%9F%E4%BE%BF%E6%90%BA%E8%93%9D%E7%89%99%E9%9F%B3%E7%AE%B1.svg"
+  },
+  {
+    "id": "p09",
+    "name": "听风 65W 氮化镓充电器",
+    "brand": "听风",
+    "category": "数码",
+    "subCategory": "充电",
+    "price": 129,
+    "stock": 60,
+    "rating": 4.7,
+    "sales": 1502,
+    "emoji": "🔌",
+    "createdAt": "2026-05-28",
+    "tags": [
+      "65W",
+      "氮化镓",
+      "三口"
+    ],
+    "keywords": [
+      "充电器",
+      "充电头",
+      "氮化镓",
+      "快充"
+    ],
+    "summary": "一个头搞定电脑和手机",
+    "description": "氮化镓方案，体积只有传统 65W 充电器的一半。C 口 + C 口 + A 口，出差只带一个。",
+    "features": [
+      "65W 大功率，可给轻薄本充电",
+      "氮化镓，体积更小",
+      "三口同时输出"
+    ],
+    "cover": "/assets/products/p09-%E5%90%AC%E9%A3%8E65W%E6%B0%AE%E5%8C%96%E9%95%93%E5%85%85%E7%94%B5%E5%99%A8.svg"
+  },
+  {
+    "id": "p10",
+    "name": "木野 智能手环 4",
+    "brand": "木野",
+    "category": "数码",
+    "subCategory": "穿戴",
+    "price": 229,
+    "stock": 33,
+    "rating": 4.2,
+    "sales": 888,
+    "emoji": "⌚",
+    "createdAt": "2026-08-08",
+    "tags": [
+      "心率",
+      "14天续航",
+      "50m防水"
+    ],
+    "keywords": [
+      "手环",
+      "智能手环",
+      "运动",
+      "心率"
+    ],
+    "summary": "记步、看心率、管睡眠",
+    "description": "50 米防水，游泳也能戴。14 天续航，不用每天充电。",
+    "features": [
+      "50m 防水",
+      "14 天续航",
+      "血氧与睡眠监测"
+    ],
+    "cover": "/assets/products/p10-%E6%9C%A8%E9%87%8E%E6%99%BA%E8%83%BD%E6%89%8B%E7%8E%AF4.svg"
+  },
+  {
+    "id": "p11",
+    "name": "砚白 手作陶瓷马克杯",
+    "brand": "砚白",
+    "category": "家居",
+    "subCategory": "杯具",
+    "price": 69,
+    "stock": 55,
+    "rating": 4.9,
+    "sales": 2103,
+    "emoji": "☕",
+    "createdAt": "2026-04-16",
+    "tags": [
+      "手工",
+      "可微波",
+      "380ml"
+    ],
+    "keywords": [
+      "杯子",
+      "马克杯",
+      "陶瓷",
+      "咖啡杯"
+    ],
+    "summary": "每只纹理都不太一样",
+    "description": "手工拉坯，釉色自然流动，所以每一只的纹理都略有差别。可微波、可洗碗机。",
+    "features": [
+      "380ml 容量",
+      "可微波炉加热",
+      "手工上釉，纹理独一无二"
+    ],
+    "cover": "/assets/products/p11-%E7%A0%9A%E7%99%BD%E6%89%8B%E4%BD%9C%E9%99%B6%E7%93%B7%E9%A9%AC%E5%85%8B%E6%9D%AF.svg"
+  },
+  {
+    "id": "p12",
+    "name": "砚白 雪松香薰蜡烛",
+    "brand": "砚白",
+    "category": "家居",
+    "subCategory": "香薰",
+    "price": 89,
+    "stock": 0,
+    "rating": 4.6,
+    "sales": 412,
+    "emoji": "🕯️",
+    "createdAt": "2026-06-02",
+    "tags": [
+      "大豆蜡",
+      "35h燃烧",
+      "木质香"
+    ],
+    "keywords": [
+      "香薰",
+      "蜡烛",
+      "香氛",
+      "礼物"
+    ],
+    "summary": "下雨天点一支",
+    "description": "大豆蜡基底，燃烧时没有黑烟。雪松与佛手柑，前调清爽，后调是木头的味道。",
+    "features": [
+      "天然大豆蜡",
+      "约 35 小时燃烧时间",
+      "可作桌面装饰"
+    ],
+    "cover": "/assets/products/p12-%E7%A0%9A%E7%99%BD%E9%9B%AA%E6%9D%BE%E9%A6%99%E8%96%B0%E8%9C%A1%E7%83%9B.svg"
+  },
+  {
+    "id": "p13",
+    "name": "木野 原木氛围灯",
+    "brand": "木野",
+    "category": "家居",
+    "subCategory": "灯具",
+    "price": 159,
+    "stock": 21,
+    "rating": 4.5,
+    "sales": 267,
+    "emoji": "💡",
+    "createdAt": "2026-07-11",
+    "tags": [
+      "无频闪",
+      "三档亮度",
+      "USB供电"
+    ],
+    "keywords": [
+      "台灯",
+      "氛围灯",
+      "小夜灯",
+      "灯"
+    ],
+    "summary": "睡前那点暖光",
+    "description": "实木底座搭配磨砂灯罩，光线柔和不刺眼。三档亮度，用 USB 供电，插充电宝也能亮。",
+    "features": [
+      "三档亮度可调",
+      "无频闪，护眼",
+      "USB 供电，可接充电宝"
+    ],
+    "cover": "/assets/products/p13-%E6%9C%A8%E9%87%8E%E5%8E%9F%E6%9C%A8%E6%B0%9B%E5%9B%B4%E7%81%AF.svg"
+  },
+  {
+    "id": "p14",
+    "name": "砚白 亚麻抱枕",
+    "brand": "砚白",
+    "category": "家居",
+    "subCategory": "布艺",
+    "price": 99,
+    "stock": 40,
+    "rating": 4.4,
+    "sales": 533,
+    "emoji": "🛋️",
+    "createdAt": "2026-05-09",
+    "tags": [
+      "亚麻",
+      "可拆洗",
+      "45cm"
+    ],
+    "keywords": [
+      "抱枕",
+      "靠垫",
+      "沙发",
+      "家居"
+    ],
+    "summary": "沙发上的那块低饱和",
+    "description": "水洗亚麻外套，带一点自然的褶皱感。隐藏拉链，外套可以拆下来洗。",
+    "features": [
+      "水洗亚麻面料",
+      "外套可拆洗",
+      "45 × 45cm"
+    ],
+    "cover": "/assets/products/p14-%E7%A0%9A%E7%99%BD%E4%BA%9A%E9%BA%BB%E6%8A%B1%E6%9E%95.svg"
+  },
+  {
+    "id": "p15",
+    "name": "砚白 A5 手账本",
+    "brand": "砚白",
+    "category": "文具",
+    "subCategory": "本册",
+    "price": 39,
+    "stock": 88,
+    "rating": 4.7,
+    "sales": 1764,
+    "emoji": "📓",
+    "createdAt": "2026-03-22",
+    "tags": [
+      "100g纸",
+      "平摊",
+      "192页"
+    ],
+    "keywords": [
+      "本子",
+      "笔记本",
+      "手账",
+      "文具"
+    ],
+    "summary": "能完全摊平的笔记本",
+    "description": "锁线装订，可以 180° 摊平。100g 米白纸，钢笔写不洇墨。",
+    "features": [
+      "可 180° 平摊",
+      "100g 米白纸，适配钢笔",
+      "192 页，附书签带"
+    ],
+    "cover": "/assets/products/p15-%E7%A0%9A%E7%99%BDA5%E6%89%8B%E8%B4%A6%E6%9C%AC.svg"
+  },
+  {
+    "id": "p16",
+    "name": "砚白 黄铜签字笔",
+    "brand": "砚白",
+    "category": "文具",
+    "subCategory": "笔具",
+    "price": 129,
+    "stock": 3,
+    "rating": 4.8,
+    "sales": 288,
+    "emoji": "🖊️",
+    "createdAt": "2026-04-02",
+    "tags": [
+      "黄铜",
+      "可换芯",
+      "可刻字"
+    ],
+    "keywords": [
+      "笔",
+      "签字笔",
+      "钢笔",
+      "礼物"
+    ],
+    "summary": "用久了会有包浆",
+    "description": "实心黄铜笔身，重量压手，写字稳。用得越久氧化得越好看，可以在笔杆上刻字。",
+    "features": [
+      "实心黄铜笔身",
+      "标准 G2 笔芯，可自行更换",
+      "支持免费刻字"
+    ],
+    "cover": "/assets/products/p16-%E7%A0%9A%E7%99%BD%E9%BB%84%E9%93%9C%E7%AD%BE%E5%AD%97%E7%AC%94.svg"
+  },
+  {
+    "id": "p17",
+    "name": "木野 羊毛毡桌垫",
+    "brand": "木野",
+    "category": "文具",
+    "subCategory": "桌面",
+    "price": 89,
+    "stock": 26,
+    "rating": 4.3,
+    "sales": 431,
+    "emoji": "🧶",
+    "createdAt": "2026-06-19",
+    "tags": [
+      "羊毛毡",
+      "80×40cm",
+      "防滑"
+    ],
+    "keywords": [
+      "桌垫",
+      "鼠标垫",
+      "桌面",
+      "垫子"
+    ],
+    "summary": "键盘底下那一层安静",
+    "description": "羊毛毡材质，吸音而且手感温润。底部硅胶点，不打滑。",
+    "features": [
+      "80 × 40cm 大尺寸",
+      "羊毛毡，吸音降噪",
+      "底部硅胶防滑点"
+    ],
+    "cover": "/assets/products/p17-%E6%9C%A8%E9%87%8E%E7%BE%8A%E6%AF%9B%E6%AF%A1%E6%A1%8C%E5%9E%AB.svg"
+  },
+  {
+    "id": "p18",
+    "name": "野径 316 保温杯",
+    "brand": "野径",
+    "category": "户外",
+    "subCategory": "水具",
+    "price": 119,
+    "stock": 47,
+    "rating": 4.6,
+    "sales": 998,
+    "emoji": "🥤",
+    "createdAt": "2026-05-15",
+    "tags": [
+      "316不锈钢",
+      "12h保温",
+      "500ml"
+    ],
+    "keywords": [
+      "保温杯",
+      "水杯",
+      "户外",
+      "杯子"
+    ],
+    "summary": "十二小时后还是热的",
+    "description": "316 医用级不锈钢内胆，不容易串味。500ml 容量，一天八杯水的第一杯。",
+    "features": [
+      "316 不锈钢内胆",
+      "12 小时保温 / 24 小时保冷",
+      "500ml 容量"
+    ],
+    "cover": "/assets/products/p18-%E9%87%8E%E5%BE%84316%E4%BF%9D%E6%B8%A9%E6%9D%AF.svg"
+  },
+  {
+    "id": "p19",
+    "name": "野径 轻量双肩包 22L",
+    "brand": "野径",
+    "category": "户外",
+    "subCategory": "背包",
+    "price": 299,
+    "stock": 19,
+    "rating": 4.7,
+    "sales": 604,
+    "emoji": "🎒",
+    "createdAt": "2026-07-29",
+    "tags": [
+      "22L",
+      "防泼水",
+      "可装16寸"
+    ],
+    "keywords": [
+      "背包",
+      "双肩包",
+      "通勤",
+      "户外"
+    ],
+    "summary": "通勤和周末都能背",
+    "description": "自重 620g，装满 22L 不塌肩。独立电脑仓，16 寸笔记本放得下。",
+    "features": [
+      "22L 容量，自重 620g",
+      "独立 16 寸电脑仓",
+      "面料防泼水"
+    ],
+    "cover": "/assets/products/p19-%E9%87%8E%E5%BE%84%E8%BD%BB%E9%87%8F%E5%8F%8C%E8%82%A9%E5%8C%8522L.svg"
+  },
+  {
+    "id": "p20",
+    "name": "野径 防晒遮阳帽",
+    "brand": "野径",
+    "category": "户外",
+    "subCategory": "配饰",
+    "price": 99,
+    "stock": 52,
+    "rating": 4.2,
+    "sales": 741,
+    "emoji": "🧢",
+    "createdAt": "2026-06-25",
+    "tags": [
+      "UPF50+",
+      "可折叠",
+      "速干"
+    ],
+    "keywords": [
+      "帽子",
+      "遮阳帽",
+      "防晒",
+      "户外"
+    ],
+    "summary": "夏天走路的那片阴影",
+    "description": "UPF50+ 防晒面料，帽檐可以折叠收纳。速干材质，出汗也不闷。",
+    "features": [
+      "UPF50+ 防晒",
+      "帽檐可折叠",
+      "速干面料"
+    ],
+    "cover": "/assets/products/p20-%E9%87%8E%E5%BE%84%E9%98%B2%E6%99%92%E9%81%AE%E9%98%B3%E5%B8%BD.svg"
+  },
+  {
+    "id": "p21",
+    "name": "野径 折叠野餐垫",
+    "brand": "野径",
+    "category": "户外",
+    "subCategory": "露营",
+    "price": 149,
+    "stock": 23,
+    "rating": 4.5,
+    "sales": 389,
+    "emoji": "🧺",
+    "createdAt": "2026-08-05",
+    "tags": [
+      "2×1.5m",
+      "防水底层",
+      "可折叠"
+    ],
+    "keywords": [
+      "野餐垫",
+      "露营",
+      "垫子",
+      "户外"
+    ],
+    "summary": "铺开就是一整个下午",
+    "description": "表层亲肤绒布，底层防水。折叠起来只有一个水杯那么大。",
+    "features": [
+      "2 × 1.5m 尺寸",
+      "底层防水防潮",
+      "折叠后可手提"
+    ],
+    "cover": "/assets/products/p21-%E9%87%8E%E5%BE%84%E6%8A%98%E5%8F%A0%E9%87%8E%E9%A4%90%E5%9E%AB.svg"
+  },
+  {
+    "id": "p22",
+    "name": "青鸟 纯棉圆领 T 恤",
+    "brand": "青鸟",
+    "category": "服饰",
+    "subCategory": "上衣",
+    "price": 89,
+    "stock": 66,
+    "rating": 4.4,
+    "sales": 1320,
+    "emoji": "👕",
+    "createdAt": "2026-05-02",
+    "tags": [
+      "纯棉",
+      "260g",
+      "落肩"
+    ],
+    "keywords": [
+      "T恤",
+      "短袖",
+      "衣服",
+      "纯棉"
+    ],
+    "summary": "260g 的厚度，不透",
+    "description": "260g 重磅纯棉，洗几次也不会变薄。落肩版型，宽松但不会垮。",
+    "features": [
+      "260g 重磅纯棉",
+      "落肩宽松版型",
+      "领口罗纹加固"
+    ],
+    "cover": "/assets/products/p22-%E9%9D%92%E9%B8%9F%E7%BA%AF%E6%A3%89%E5%9C%86%E9%A2%86T%E6%81%A4.svg"
+  },
+  {
+    "id": "p23",
+    "name": "木野 羊毛混纺袜",
+    "brand": "木野",
+    "category": "服饰",
+    "subCategory": "袜子",
+    "price": 39,
+    "stock": 90,
+    "rating": 4.3,
+    "sales": 1877,
+    "emoji": "🧦",
+    "createdAt": "2026-04-28",
+    "tags": [
+      "羊毛混纺",
+      "三双装",
+      "中筒"
+    ],
+    "keywords": [
+      "袜子",
+      "羊毛袜",
+      "保暖",
+      "服饰"
+    ],
+    "summary": "冬天最实用的礼物",
+    "description": "羊毛混纺，脚感柔软不扎。中筒高度，配球鞋和靴子都合适。",
+    "features": [
+      "羊毛混纺，保暖不捂脚",
+      "中筒高度",
+      "三双一组"
+    ],
+    "cover": "/assets/products/p23-%E6%9C%A8%E9%87%8E%E7%BE%8A%E6%AF%9B%E6%B7%B7%E7%BA%BA%E8%A2%9C.svg"
+  },
+  {
+    "id": "p24",
+    "name": "听风 记忆棉键盘腕托",
+    "brand": "听风",
+    "category": "配件",
+    "subCategory": "腕托",
+    "price": 59,
+    "stock": 44,
+    "rating": 4.5,
+    "sales": 826,
+    "emoji": "🖐️",
+    "createdAt": "2026-06-08",
+    "tags": [
+      "记忆棉",
+      "87键适配",
+      "可拆洗"
+    ],
+    "keywords": [
+      "腕托",
+      "手托",
+      "键盘配件",
+      "人体工学"
+    ],
+    "summary": "手腕不那么酸了",
+    "description": "慢回弹记忆棉，承托手腕但不塌陷。外套可以拆下来洗。",
+    "features": [
+      "慢回弹记忆棉",
+      "适配 87 键及以下键盘",
+      "外套可拆洗"
+    ],
+    "cover": "/assets/products/p24-%E5%90%AC%E9%A3%8E%E8%AE%B0%E5%BF%86%E6%A3%89%E9%94%AE%E7%9B%98%E8%85%95%E6%89%98.svg"
+  },
+  {
+    "id": "p25",
+    "name": "木野 硅胶耳机套",
+    "brand": "木野",
+    "category": "配件",
+    "subCategory": "耳机配件",
+    "price": 29,
+    "stock": 120,
+    "rating": 4.1,
+    "sales": 2050,
+    "emoji": "🎼",
+    "createdAt": "2026-03-30",
+    "tags": [
+      "食品级硅胶",
+      "三副装",
+      "降噪贴合"
+    ],
+    "keywords": [
+      "耳塞套",
+      "耳机套",
+      "硅胶",
+      "配件"
+    ],
+    "summary": "换一副耳塞，隔音更好",
+    "description": "食品级硅胶，三种尺寸。贴合度提高之后，隔音和低频都会明显变好。",
+    "features": [
+      "食品级硅胶",
+      "S / M / L 三副装",
+      "适配大多数入耳式耳机"
+    ],
+    "cover": "/assets/products/p25-%E6%9C%A8%E9%87%8E%E7%A1%85%E8%83%B6%E8%80%B3%E6%9C%BA%E5%A5%97.svg"
+  },
+  {
+    "id": "p26",
+    "name": "砚白 桌面收纳盒",
+    "brand": "砚白",
+    "category": "配件",
+    "subCategory": "收纳",
+    "price": 79,
+    "stock": 31,
+    "rating": 4.4,
+    "sales": 512,
+    "emoji": "🗂️",
+    "createdAt": "2026-07-02",
+    "tags": [
+      "可叠放",
+      "三格",
+      "ABS+木"
+    ],
+    "keywords": [
+      "收纳盒",
+      "桌面",
+      "整理",
+      "配件"
+    ],
+    "summary": "桌上终于不乱",
+    "description": "三格分区，笔、线材、小物件各有位置。外壳是 ABS 加木纹贴面，可以叠放。",
+    "features": [
+      "三格分区收纳",
+      "可上下叠放",
+      "ABS + 木纹贴面"
+    ],
+    "cover": "/assets/products/p26-%E7%A0%9A%E7%99%BD%E6%A1%8C%E9%9D%A2%E6%94%B6%E7%BA%B3%E7%9B%92.svg"
+  }
+]
