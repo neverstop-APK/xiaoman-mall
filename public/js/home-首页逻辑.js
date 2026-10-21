@@ -18,9 +18,11 @@
 import { api } from './api-请求封装.js';
 import { cardHtml } from './card-商品卡片.js';
 import { cartStore } from './store-购物车状态.js';
-import { $, escapeHtml, toast, bindHeaderSearch, bindCartBadge, ICONS } from './ui-通用界面工具.js';
+import { $, escapeHtml, toast, bindHeaderSearch, bindCartBadge, syncHeaderHeight, ICONS } from './ui-通用界面工具.js';
 import { initCartDrawer } from './cartdrawer-购物车抽屉.js';
 import { initCheckout } from './checkout-结算下单.js';
+import { initAuthUI } from './authui-登录注册弹窗.js';
+import { initAgentPanel } from './agent-购物助手面板.js';
 
 const PAGE_SIZE = 8;
 
@@ -60,6 +62,9 @@ const el = {
   sortSelect: $('#sortSelect'),
   categoryGrid: $('#categoryGrid'),
   recommendRow: $('#recommendRow'),
+  recentSection: $('#recent'),
+  recentRow: $('#recentRow'),
+  recentClearBtn: $('#recentClearBtn'),
   heroCovers: [$('#heroCover1'), $('#heroCover2'), $('#heroCover3')],
   statProducts: $('#statProducts'),
   statCategories: $('#statCategories')
@@ -329,7 +334,8 @@ async function loadProducts(options) {
 
 function scrollToList() {
   if (!el.list) return;
-  const top = el.list.getBoundingClientRect().top + window.scrollY - 84;
+  const headerH = Number(getComputedStyle(document.documentElement).getPropertyValue('--header-h').replace('px', '')) || 84;
+  const top = el.list.getBoundingClientRect().top + window.scrollY - headerH - 16;
   window.scrollTo({ top, behavior: 'smooth' });
 }
 
@@ -396,6 +402,13 @@ function bindEvents() {
     if (addBtn) handleAdd(addBtn);
   });
 
+  if (el.recentRow) {
+    el.recentRow.addEventListener('click', (event) => {
+      const addBtn = event.target.closest('[data-add]');
+      if (addBtn) handleAdd(addBtn);
+    });
+  }
+
   el.categoryChips.addEventListener('click', (event) => {
     const chip = event.target.closest('[data-category]');
     if (chip) applyFilter({ category: chip.dataset.category });
@@ -436,13 +449,55 @@ function bindEvents() {
   if (resetBtn) resetBtn.addEventListener('click', clearFilters);
 }
 
+/* ======================= 五、最近看过 ======================= */
+
+const RECENT_KEY = 'xm_recent_products';
+
+function readRecentIds() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    if (!Array.isArray(raw)) return [];
+    return raw.filter((id) => typeof id === 'string').slice(0, 6);
+  } catch (error) {
+    return [];
+  }
+}
+
+function renderRecent(list) {
+  if (!el.recentSection || !el.recentRow) return;
+  el.recentRow.innerHTML = list.map((product) => cardHtml(product, 'recommend-card')).join('');
+  el.recentSection.hidden = list.length === 0;
+}
+
+async function loadRecent() {
+  const ids = readRecentIds();
+  if (!ids.length) return;
+
+  // 单件商品可能已下架，用 allSettled 忽略失败项，不影响整块
+  const results = await Promise.allSettled(ids.map((id) => api.products.detail(id)));
+  const list = results.filter((item) => item.status === 'fulfilled').map((item) => item.value);
+  renderRecent(list);
+}
+
+function bindRecent() {
+  if (!el.recentClearBtn) return;
+  el.recentClearBtn.addEventListener('click', () => {
+    localStorage.removeItem(RECENT_KEY);
+    renderRecent([]);
+    toast('已清空最近看过', 'success', 1600);
+  });
+}
+
 /* ======================= 六、启动 ======================= */
 
 function init() {
+  syncHeaderHeight();
   readStateFromUrl();
 
   initCartDrawer();
   initCheckout();
+  initAuthUI();
+  initAgentPanel();
   bindCartBadge(cartStore);
   bindEvents();
 
@@ -461,6 +516,8 @@ function init() {
 
   loadBase();
   loadProducts();
+  bindRecent();
+  loadRecent();
 }
 
 init();

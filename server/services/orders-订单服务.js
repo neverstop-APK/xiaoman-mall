@@ -99,6 +99,8 @@ function create(body = {}) {
     },
     remark: String(body.remark || '').slice(0, 100),
     cartId: body.cartId || null,
+    // 登录用户下单会记下 userId，未登录则为 null（游客订单）
+    userId: body.userId || null,
     createdAt: new Date().toISOString(),
     paidAt: null
   };
@@ -140,15 +142,45 @@ function pay(id) {
   return order;
 }
 
+/**
+ * 取消订单
+ * 待支付 -> 已取消，同时把库存加回去、销量减回来。
+ * 这是一个"补偿操作"：下单时扣了什么，取消时就要还什么。
+ */
 function cancel(id) {
   const orders = store.read('orders', []);
   const order = orders.find((item) => item.id === id);
   if (!order) throw new HttpError(404, 40403, '订单不存在：' + id);
   if (order.status === 'paid') throw new HttpError(409, 40905, '已支付的订单不能取消');
+  if (order.status === 'cancelled') throw new HttpError(409, 40906, '这笔订单已经取消过了');
+
   order.status = 'cancelled';
   order.statusText = STATUS_TEXT.cancelled;
+  order.cancelledAt = new Date().toISOString();
+
+  // 回滚库存与销量（创建订单时扣过）
+  const products = store.read('products', []);
+  const nextProducts = products.map((product) => {
+    const hit = order.items.find((item) => item.productId === product.id);
+    if (!hit) return product;
+    return {
+      ...product,
+      stock: product.stock + hit.quantity,
+      sales: Math.max(0, product.sales - hit.quantity)
+    };
+  });
+  store.write('products', nextProducts);
   store.write('orders', orders);
   return order;
 }
 
-module.exports = { create, getById, pay, cancel, FREE_SHIPPING_LIMIT, SHIPPING_FEE, STATUS_TEXT };
+/** 某个用户的历史订单，按时间倒序 */
+function listByUser(userId) {
+  if (!userId) return [];
+  return store
+    .read('orders', [])
+    .filter((order) => order.userId === userId)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+}
+
+module.exports = { create, getById, pay, cancel, listByUser, FREE_SHIPPING_LIMIT, SHIPPING_FEE, STATUS_TEXT };

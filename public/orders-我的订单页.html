@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="./css/components-通用组件样式.css">
   <link rel="stylesheet" href="./css/pages-各页面专属样式.css">
   <link rel="stylesheet" href="./css/extra-结算与补充样式.css">
+  <link rel="stylesheet" href="./css/auth-登录与账号样式.css">
+  <link rel="stylesheet" href="./css/agent-购物助手样式.css">
 </head>
 <body>
   <header class="site-header">
@@ -43,6 +45,10 @@
           <span class="icon-label">购物车</span>
           <span class="cart-badge" id="cartBadge">0</span>
         </button>
+        <button class="icon-btn" id="accountBtn" type="button" aria-haspopup="menu" aria-label="登录或注册">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></svg>
+          <span class="icon-label" id="accountLabel">登录</span>
+        </button>
       </div>
     </div>
   </header>
@@ -52,7 +58,7 @@
       <div>
         <p class="eyebrow">Orders</p>
         <h1 class="h1">我的订单</h1>
-        <p class="text-sm text-muted">下单成功后会自动跳到这里。订单号同时存在浏览器 localStorage 里，换设备或清缓存就查不到了，记得复制单号。</p>
+        <p class="text-sm text-muted">下单成功后会自动跳到这里。登录后订单会跟着账号走，换设备登录也能看到；未登录时订单号只记在这台浏览器里，记得复制单号。</p>
       </div>
       <a class="btn btn-ghost" href="./index-首页.html#list">继续逛逛</a>
     </div>

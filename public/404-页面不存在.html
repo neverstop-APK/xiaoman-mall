@@ -74,5 +74,9 @@
       </nav>
     </div>
   </footer>
+
+  <!-- 404 页也复用页头搜索框：提交后带着关键词回首页列表。
+       逻辑写在独立文件里，Nginx 的 CSP 才允许加载（script-src 'self'）。 -->
+  <script type="module" src="./js/404-页面逻辑.js"></script>
 </body>
 </html>

@@ -25,6 +25,7 @@ const els = {
   list: $('#cartItems'),
   empty: $('#cartEmpty'),
   footer: $('#cartFooter'),
+  shippingHint: $('#cartShippingHint'),
   total: $('#cartTotal'),
   count: $('#cartCount'),
   clearBtn: $('#cartClearBtn'),
@@ -68,9 +69,25 @@ function render(state) {
   if (els.footer) els.footer.hidden = !hasItems;
 
   if (els.total) els.total.textContent = formatMoney(state.totalAmount);
+  renderShippingHint(state.totalAmount);
   if (els.count) els.count.textContent = state.totalQuantity + ' 件';
   if (els.checkoutBtn) els.checkoutBtn.disabled = !hasItems;
   if (els.clearBtn) els.clearBtn.disabled = !hasItems;
+}
+
+const FREE_SHIPPING_LIMIT = 99;
+const SHIPPING_FEE = 12;
+
+/** 免运费进度：与服务端 orders 服务的规则保持一致（满 99 免运，否则 12 元） */
+function renderShippingHint(totalAmount) {
+  if (!els.shippingHint) return;
+  const free = totalAmount >= FREE_SHIPPING_LIMIT;
+  const percent = Math.min(100, Math.round((totalAmount / FREE_SHIPPING_LIMIT) * 100));
+  els.shippingHint.classList.toggle('is-free', free);
+  els.shippingHint.innerHTML = free
+    ? '<span class="shipping-text">已满 ¥99，这单免运费</span>'
+    : '<span class="shipping-text">再买 ' + formatMoney(FREE_SHIPPING_LIMIT - totalAmount) + ' 免运费，否则加收 ¥' + SHIPPING_FEE + '</span>' +
+      '<span class="shipping-bar" aria-hidden="true"><i style="width:' + percent + '%"></i></span>';
 }
 
 /** 统一的错误提示：把接口返回的中文 message 原样告诉用户 */

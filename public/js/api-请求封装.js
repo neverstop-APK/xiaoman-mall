@@ -147,7 +147,37 @@ export const api = {
     }
   },
 
+  auth: {
+    me() {
+      return request('/api/auth/me');
+    },
+    login({ username, password }) {
+      return request('/api/auth/login', { method: 'POST', body: { username, password } });
+    },
+    register({ username, password, nickname }) {
+      return request('/api/auth/register', { method: 'POST', body: { username, password, nickname } });
+    },
+    logout() {
+      return request('/api/auth/logout', { method: 'POST' });
+    }
+  },
+
+  agent: {
+    config() {
+      return request('/api/agent/config');
+    },
+    conversation(id) {
+      return request('/api/agent/conversation/' + encodeURIComponent(id));
+    },
+    confirm(payload) {
+      return request('/api/agent/confirm', { method: 'POST', body: payload, timeout: 20000 });
+    }
+  },
+
   orders: {
+    list() {
+      return request('/api/orders');
+    },
     create(payload) {
       return request('/api/orders', { method: 'POST', body: payload });
     },
@@ -162,6 +192,95 @@ export const api = {
     }
   }
 };
+
+/**
+ * AI 助手的流式对话：唯一一个不用 request() 的接口
+ * --------------------------------------------------------------------------
+ * 普通接口是"一问一答"：等 JSON 回来再解析。
+ * 流式接口（SSE）是"一问多答"：服务器边想边往回写，浏览器要一段一段读。
+ * 所以这里手动 fetch + 读 ReadableStream，再按 SSE 的格式切出事件。
+ *
+ * SSE 文本长这样（空行分隔一个事件）：
+ *   event: delta
+ *   data: {"text":"找"}
+ *
+ * @param {object} options { conversationId, message, cartId, onEvent, timeout }
+ * @returns {Promise<object>} 最后一个 done 事件的 data
+ */
+export async function streamAgentChat({ conversationId, message, cartId, onEvent, timeout = 90000 }) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+  let finished = null;
+
+  try {
+    const response = await fetch(BASE_URL + '/api/agent/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'text/event-stream' },
+      body: JSON.stringify({ conversationId, message, cartId }),
+      signal: controller.signal
+    });
+
+    if (!response.ok || !response.body) {
+      let detail = '助手暂时不可用（HTTP ' + response.status + '）';
+      try {
+        const payload = await response.json();
+        if (payload && payload.message) detail = payload.message;
+      } catch {
+        /* 响应不是 JSON 时保留默认提示 */
+      }
+      throw new ApiError(detail, { status: response.status, url: '/api/agent/chat' });
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    // 把缓冲区里"已经完整"的事件切出来处理，剩下不完整的留在 buffer 里等下一块
+    const drain = () => {
+      const blocks = buffer.split(/\r?\n\r?\n/);
+      buffer = blocks.pop() || '';
+      for (const block of blocks) {
+        let event = 'message';
+        const dataLines = [];
+        for (const line of block.split(/\r?\n/)) {
+          if (line.startsWith('event:')) event = line.slice(6).trim();
+          else if (line.startsWith('data:')) dataLines.push(line.slice(5).trim());
+        }
+        if (!dataLines.length) continue;
+        let payload;
+        try {
+          payload = JSON.parse(dataLines.join('\n'));
+        } catch {
+          continue;
+        }
+        if (event === 'done') finished = payload;
+        if (onEvent) onEvent(event, payload);
+      }
+    };
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      drain();
+    }
+    buffer += decoder.decode();
+    if (buffer.trim()) {
+      buffer += '\n\n';
+      drain();
+    }
+
+    return finished || {};
+  } catch (error) {
+    if (error instanceof ApiError) throw error;
+    if (error.name === 'AbortError') {
+      throw new ApiError('助手响应超时了，请再试一次', { isNetwork: true, url: '/api/agent/chat' });
+    }
+    throw new ApiError('和助手连接中断了，请检查后端是否启动', { isNetwork: true, url: '/api/agent/chat' });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 /** 金额格式化：299 -> ¥299.00，统一在这里处理，页面里就不会出现 299 和 299.0 混用 */
 export function formatMoney(value) {

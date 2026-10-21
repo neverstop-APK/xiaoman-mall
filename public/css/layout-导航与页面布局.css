@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   gap: clamp(0.75rem, 2vw, 2rem);
-  min-height: var(--header-h);
+  min-height: 68px; /* 只是最小高度；真实高度由 syncHeaderHeight() 量出来写进 --header-h，供定位使用 */
 }
 
 /* Logo：一个圆点 + 中文名，不用图片，缩放永远清晰 */
@@ -301,6 +301,21 @@
   scroll-snap-align: start;
 }
 
+/* 最近看过：固定卡片宽度，只有一件时不会被拉成整行 */
+.recent-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 260px);
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding-bottom: var(--space-3);
+  scroll-snap-type: x mandatory;
+}
+
+.recent-row > * {
+  scroll-snap-align: start;
+}
+
 /* ---------- 5. 页脚 ---------- */
 .site-footer {
   margin-top: var(--space-8);
@@ -397,9 +412,6 @@
 }
 
 @media (max-width: 640px) {
-  :root {
-    --header-h: 60px;
-  }
 
   .icon-btn .icon-label {
     display: none; /* 只留图标，省空间 */

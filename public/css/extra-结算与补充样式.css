@@ -97,3 +97,37 @@
     flex: 1 1 120px;
   }
 }
+
+/* ---------- 4. 购物车：免运费进度 ---------- */
+.shipping-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+.shipping-hint .shipping-text {
+  display: block;
+}
+
+.shipping-hint.is-free {
+  color: var(--success);
+}
+
+.shipping-bar {
+  display: block;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--line);
+}
+
+.shipping-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+  transition: width 0.3s ease;
+}

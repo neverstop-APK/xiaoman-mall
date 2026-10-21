@@ -7,7 +7,11 @@
   "scripts": {
     "start": "node server/index-服务入口.js",
     "dev": "node --watch server/index-服务入口.js",
-    "covers": "node scripts/gen-covers-生成商品封面.js"
+    "covers": "node scripts/gen-covers-生成商品封面.js",
+    "test": "node --test \"tests/unit/*.test.mjs\" \"tests/api/*.test.mjs\"",
+    "test:unit": "node --test \"tests/unit/*.test.mjs\"",
+    "test:api": "node --test \"tests/api/*.test.mjs\"",
+    "test:eval": "node tests/eval/run-评测.mjs"
   },
   "engines": {
     "node": ">=18"

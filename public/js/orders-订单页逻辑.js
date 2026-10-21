@@ -1,8 +1,11 @@
 import { api, formatMoney } from './api-请求封装.js';
 import { cartStore } from './store-购物车状态.js';
-import { $, escapeHtml, toast, bindCartBadge, bindHeaderSearch } from './ui-通用界面工具.js';
+import { $, escapeHtml, toast, bindCartBadge, bindHeaderSearch, syncHeaderHeight } from './ui-通用界面工具.js';
 import { initCartDrawer } from './cartdrawer-购物车抽屉.js';
 import { initCheckout, savedOrderIds } from './checkout-结算下单.js';
+import { authStore } from './auth-登录状态.js';
+import { initAuthUI, openAuth } from './authui-登录注册弹窗.js';
+import { initAgentPanel } from './agent-购物助手面板.js';
 
 /* ============================================================
  * 我的订单页
@@ -157,51 +160,79 @@ async function loadSingle(id) {
   }
 }
 
+function emptyBlock(emoji, title, text, action) {
+  return [
+    '<div class="empty">',
+    '<span class="empty-emoji" aria-hidden="true">' + emoji + '</span>',
+    '<span class="empty-title">' + escapeHtml(title) + '</span>',
+    '<span class="text-sm text-muted">' + escapeHtml(text) + '</span>',
+    action || '',
+    '</div>'
+  ].join('');
+}
+
+/**
+ * 订单列表有两种来源：
+ *   · 已登录：GET /api/orders，服务端按 userId 返回，换设备也能看到；
+ *   · 未登录：只能读本机 localStorage 里记过的订单号（游客订单）。
+ */
 async function loadHistory() {
-  const ids = savedOrderIds();
   const list = $('#ordersList');
   const section = $('#orderHistorySection');
   const count = $('#ordersCount');
-
-  if (!ids.length) {
-    section.hidden = false;
-    count.textContent = '';
-    list.innerHTML = [
-      '<div class="empty">',
-      '<span class="empty-emoji" aria-hidden="true">🧾</span>',
-      '<span class="empty-title">这台设备还没有下过单</span>',
-      '<span class="text-sm text-muted">下单成功后会自动记下订单号，并出现在这里。</span>',
-      '<a class="btn btn-primary" href="./index-首页.html#list">去挑点东西</a>',
-      '</div>'
-    ].join('');
-    return;
-  }
+  const user = authStore.state.user;
 
   section.hidden = false;
-  count.textContent = '正在加载 ' + ids.length + ' 个订单…';
+  count.textContent = '正在加载…';
   list.innerHTML = '<div class="skeleton" style="height:180px;border-radius:var(--radius)"></div>';
 
-  // 订单号可能已经被清库清掉，用 allSettled 保证个别失败不影响其他订单
-  const results = await Promise.allSettled(ids.map(function (id) { return api.orders.detail(id); }));
-  const orders = [];
-  results.forEach(function (result) {
-    if (result.status === 'fulfilled') orders.push(result.value);
-  });
+  let orders = [];
+
+  if (user) {
+    try {
+      orders = await api.orders.list();
+    } catch (error) {
+      count.textContent = '';
+      list.innerHTML = emptyBlock('🔌', '订单加载失败', error.message || '请稍后重试', '<button class="btn btn-ghost" type="button" onclick="location.reload()">重新加载</button>');
+      return;
+    }
+  } else {
+    const ids = savedOrderIds();
+    if (!ids.length) {
+      count.textContent = '';
+      list.innerHTML = emptyBlock(
+        '🧾',
+        '还没有订单',
+        '登录后订单会跟着账号走，换设备也能看到；未登录时只能查到这台设备下过的单。',
+        '<button class="btn btn-primary" type="button" data-open-login>登录 / 注册</button>' +
+          '<a class="btn btn-ghost" href="./index-首页.html#list">先去逛逛</a>'
+      );
+      return;
+    }
+
+    const results = await Promise.allSettled(ids.map(function (id) { return api.orders.detail(id); }));
+    results.forEach(function (result) {
+      if (result.status === 'fulfilled') orders.push(result.value);
+    });
+  }
 
   if (!orders.length) {
     count.textContent = '';
-    list.innerHTML = [
-      '<div class="empty">',
-      '<span class="empty-emoji" aria-hidden="true">🗂️</span>',
-      '<span class="empty-title">订单查不到了</span>',
-      '<span class="text-sm text-muted">可能是服务端数据被重置过。可以到首页重新下一单。</span>',
-      '<a class="btn btn-ghost" href="./index-首页.html#list">去逛逛</a>',
-      '</div>'
-    ].join('');
+    list.innerHTML = emptyBlock(
+      '🗂️',
+      '还没有订单',
+      user ? '挑一件喜欢的东西，下单后会出现在这里。' : '登录后可跨设备查看订单。',
+      user
+        ? '<a class="btn btn-primary" href="./index-首页.html#list">去挑点东西</a>'
+        : '<button class="btn btn-primary" type="button" data-open-login>登录 / 注册</button>'
+    );
     return;
   }
 
-  count.textContent = '共 ' + orders.length + ' 个订单';
+  const hint = user
+    ? '共 ' + orders.length + ' 个订单 · 已登录：' + user.nickname
+    : '共 ' + orders.length + ' 个订单 · 游客订单（登录后可跨设备查看）';
+  count.textContent = hint;
   list.innerHTML = orders.map(orderCardHtml).join('');
 }
 
@@ -306,15 +337,30 @@ function bindEvents() {
     if (!keyword) return;
     location.href = './index-首页.html?keyword=' + encodeURIComponent(keyword) + '#list';
   });
+
+  document.addEventListener('click', function (event) {
+    if (event.target.closest('[data-open-login]')) openAuth('login');
+  });
 }
 
 /* ---------------- 启动 ---------------- */
 
 async function init() {
+  syncHeaderHeight();
   initCartDrawer();
   initCheckout();
+  initAuthUI();
+  initAgentPanel();
   bindCartBadge(cartStore);
   bindEvents();
+
+  // 先确认登录态，再决定订单从服务端列表拿还是读本机
+  await authStore.init();
+
+  window.addEventListener('auth:change', function () {
+    // 登录 / 退出后重新加载，让列表来源和顶栏同时更新
+    location.reload();
+  });
 
   currentId = readOrderId();
   if (currentId) {

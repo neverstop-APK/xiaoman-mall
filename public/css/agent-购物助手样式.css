@@ -1,0 +1,882 @@
+/* ==========================================================================
+   文件作用：AI 购物助手的全部样式（悬浮按钮 + 对话框 + 消息气泡 + 商品卡）
+   --------------------------------------------------------------------------
+   这一层是新加的，不修改原来的五层样式，只复用 base 里的颜色/圆角/阴影变量。
+   命名统一用 agent- 前缀，避免和购物车抽屉、结算弹窗的类名打架。
+
+   布局思路：
+     · 桌面端：按钮在右下角，对话框从按钮上方弹出，宽 400px、高不超过一屏；
+     · 手机端（<=760px）：对话框变成从底部升起的整宽面板，按钮缩小并让位；
+     · 面板内部用 flex 列布局，只有中间消息区滚动，头和输入框固定。
+
+   对应考核点：3.9 响应式、9.1 对话界面、9.7 富消息（商品卡/确认卡）
+   ========================================================================== */
+
+/* ---------- 1. 悬浮按钮 ---------- */
+.agent-fab {
+  position: fixed;
+  right: clamp(0.9rem, 2.6vw, 1.8rem);
+  bottom: clamp(0.9rem, 2.6vw, 1.8rem);
+  z-index: 95;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1.05rem 0.7rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, #d26436, var(--accent-dark));
+  color: #fff;
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: 0 14px 30px -12px rgba(120, 52, 24, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+  transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), filter 0.2s var(--ease);
+}
+
+.agent-fab:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.06);
+  box-shadow: 0 18px 36px -12px rgba(120, 52, 24, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.agent-fab:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.agent-fab:focus-visible {
+  outline: 3px solid rgba(194, 84, 43, 0.35);
+  outline-offset: 3px;
+}
+
+.agent-fab-icon {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.agent-fab-icon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+/* 面板打开时把按钮收成圆点，避免它压在“发送”附近 */
+.agent-fab[aria-expanded='true'] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
+/* ---------- 2. 遮罩：只负责让背后的页面退后一步 ---------- */
+.agent-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 94;
+  background: rgba(35, 32, 28, 0.32);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s var(--ease), visibility 0.25s var(--ease);
+}
+
+.agent-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ---------- 3. 对话框外壳 ---------- */
+.agent-panel {
+  position: fixed;
+  right: clamp(0.9rem, 2.6vw, 1.8rem);
+  bottom: 5.4rem;
+  z-index: 96;
+  display: flex;
+  flex-direction: column;
+  width: min(400px, calc(100vw - 1.8rem));
+  height: min(720px, calc(100dvh - 7rem));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(14px) scale(0.985);
+  transition: opacity 0.22s var(--ease), transform 0.22s var(--ease), visibility 0.22s var(--ease);
+}
+
+.agent-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+}
+
+/* ---------- 4. 头部 ---------- */
+.agent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.85rem 0.9rem 0.8rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #fffdf9, var(--surface-2));
+}
+
+.agent-id {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.agent-avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-family: var(--font-serif, Georgia, 'Songti SC', serif);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.agent-id h2 {
+  margin: 0;
+  font-family: var(--font-serif, Georgia, 'Songti SC', serif);
+  font-size: 1.02rem;
+  letter-spacing: 0.02em;
+}
+
+.agent-mode {
+  margin: 0.1rem 0 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.agent-icon-btn {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.18s var(--ease), color 0.18s var(--ease);
+}
+
+.agent-icon-btn:hover {
+  background: var(--bg-soft);
+  color: var(--ink);
+}
+
+.agent-icon-btn:focus-visible {
+  outline: 2px solid rgba(194, 84, 43, 0.4);
+  outline-offset: 1px;
+}
+
+/* ---------- 5. 消息区 ---------- */
+.agent-log {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem 0.9rem 0.4rem;
+  background:
+    radial-gradient(120% 60% at 100% 0%, rgba(246, 228, 217, 0.5), transparent 60%),
+    var(--surface);
+  scroll-behavior: smooth;
+}
+
+.agent-log::-webkit-scrollbar {
+  width: 8px;
+}
+
+.agent-log::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--line-strong);
+  background-clip: padding-box;
+}
+
+.agent-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.9rem;
+  animation: agent-rise 0.22s var(--ease) both;
+}
+
+.agent-msg--user {
+  align-items: flex-end;
+}
+
+.agent-msg--bot {
+  align-items: flex-start;
+}
+
+.agent-bubble {
+  max-width: 88%;
+  padding: 0.62rem 0.8rem;
+  border-radius: 14px 14px 14px 4px;
+  background: var(--bg-soft);
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  line-height: 1.68;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.agent-msg--user .agent-bubble {
+  border-radius: 14px 14px 4px 14px;
+  background: var(--accent);
+  color: #fff;
+}
+
+/* 助手气泡里如果只有“正在输入”，用三个跳动的小点 */
+.agent-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 1.1em;
+  vertical-align: -0.15em;
+}
+
+.agent-typing i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: agent-blink 1.1s infinite ease-in-out;
+}
+
+.agent-typing i:nth-child(2) {
+  animation-delay: 0.16s;
+}
+
+.agent-typing i:nth-child(3) {
+  animation-delay: 0.32s;
+}
+
+.agent-status {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.agent-status::before {
+  content: '· ';
+}
+
+/* 系统提示（降级、超范围、错误）— 居中细条 */
+.agent-note {
+  align-self: center;
+  max-width: 92%;
+  margin: 0.1rem 0 0.2rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.agent-error {
+  border-color: rgba(176, 58, 52, 0.3);
+  background: #fbeeed;
+  color: var(--danger);
+}
+
+/* ---------- 6. 富消息：商品卡 ---------- */
+.agent-products {
+  display: grid;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.agent-product {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.42rem 0.45rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease), transform 0.18s var(--ease);
+}
+
+.agent-product:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
+.agent-product-thumb {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+}
+
+.agent-product-cover {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--bg-soft);
+}
+
+.agent-product-no {
+  position: absolute;
+  top: -0.25rem;
+  left: -0.25rem;
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1px solid rgba(194, 84, 43, 0.25);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent-dark);
+  font-size: 0.66rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.agent-product-main {
+  min-width: 0;
+}
+
+.agent-product-name {
+  display: block;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-product-name:hover {
+  color: var(--accent-dark);
+}
+
+.agent-product-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 0.1rem;
+}
+
+.agent-product-price {
+  color: var(--accent-dark);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.agent-product-stock {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.agent-product-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease), background 0.18s var(--ease);
+}
+
+.agent-product-add:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.agent-product-add:disabled {
+  border-color: var(--line);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* ---------- 7. 富消息：下单确认卡 ---------- */
+.agent-action {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid rgba(194, 84, 43, 0.28);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #fffaf5, var(--surface));
+}
+
+.agent-action-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.agent-action-title {
+  font-family: var(--font-serif, Georgia, 'Songti SC', serif);
+  font-size: 0.95rem;
+}
+
+.agent-action-amount {
+  color: var(--accent-dark);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.agent-action-list {
+  margin: 0 0 0.55rem;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+  line-height: 1.7;
+}
+
+.agent-action-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.agent-action-fields {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 0.55rem;
+}
+
+.agent-action-fields .field-label {
+  font-size: var(--fs-xs);
+}
+
+.agent-action-fields .input {
+  padding: 0.42rem 0.55rem;
+  font-size: var(--fs-sm);
+}
+
+.agent-action-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.agent-action-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+}
+
+.agent-action .btn {
+  padding: 0.42rem 0.8rem;
+  font-size: var(--fs-sm);
+}
+
+/* 下单成功卡 */
+.agent-result {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid rgba(63, 125, 90, 0.28);
+  border-radius: var(--radius);
+  background: var(--success-soft);
+}
+
+.agent-result-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--success);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+}
+
+.agent-result p {
+  margin: 0.35rem 0 0.6rem;
+  color: var(--ink-2);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+}
+
+.agent-result p code {
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.agent-result-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.agent-result-links .btn {
+  padding: 0.38rem 0.7rem;
+  font-size: var(--fs-xs);
+}
+
+/* ---------- 8. 快捷问题 ---------- */
+.agent-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem 0;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.agent-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.agent-chip {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 0.34rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: var(--fs-xs);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.18s var(--ease), color 0.18s var(--ease), background 0.18s var(--ease);
+}
+
+.agent-chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.agent-chips[hidden] {
+  display: none;
+}
+
+/* ---------- 9. 输入区 ---------- */
+.agent-composer {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.45rem;
+  padding: 0.55rem 0.9rem 0.35rem;
+  background: var(--surface);
+  padding-bottom: max(0.35rem, env(safe-area-inset-bottom));
+}
+
+.agent-composer textarea {
+  flex: 1;
+  min-height: 2.4rem;
+  max-height: 6.5rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: #fffefb;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  resize: none;
+  transition: border-color 0.18s var(--ease), box-shadow 0.18s var(--ease);
+}
+
+.agent-composer textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(194, 84, 43, 0.12);
+  outline: none;
+}
+
+.agent-composer textarea::placeholder {
+  color: var(--muted);
+}
+
+.agent-send {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.18s var(--ease), transform 0.18s var(--ease), opacity 0.18s var(--ease);
+}
+
+.agent-send:hover {
+  background: var(--accent-dark);
+}
+
+.agent-send:active {
+  transform: scale(0.95);
+}
+
+.agent-send:disabled {
+  background: var(--line-strong);
+  cursor: not-allowed;
+}
+
+.agent-send svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.agent-foot {
+  margin: 0;
+  padding: 0 0.9rem 0.6rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1.4;
+  text-align: center;
+  background: var(--surface);
+}
+
+/* ---------- 10. 动画 ---------- */
+@keyframes agent-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes agent-blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+/* ---------- 11. 手机端：整宽底部面板 ---------- */
+@media (max-width: 760px) {
+  .agent-fab {
+    right: 0.85rem;
+    bottom: 0.85rem;
+    padding: 0.55rem 0.9rem 0.55rem 0.6rem;
+  }
+
+  .agent-panel {
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: min(88dvh, 720px);
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    transform: translateY(24px);
+  }
+
+  .agent-backdrop {
+    background: rgba(35, 32, 28, 0.42);
+  }
+
+  .agent-bubble {
+    max-width: 92%;
+  }
+
+  .agent-product {
+    grid-template-columns: 2.9rem minmax(0, 1fr) auto;
+    gap: 0.5rem;
+  }
+
+  .agent-product-cover {
+    width: 2.9rem;
+    height: 2.9rem;
+  }
+
+  .agent-product-add {
+    padding: 0.32rem 0.45rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .agent-fab-label {
+    display: none;
+  }
+
+  .agent-fab {
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+
+  .agent-head {
+    padding-left: 0.8rem;
+  }
+
+  .agent-action-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .agent-action .btn {
+    width: 100%;
+  }
+}
+
+/* 尊重"减少动态效果"的系统设置 */
+/* 尊重"减少动态效果"的系统设置 */
+@media (prefers-reduced-motion: reduce) {
+  .agent-panel,
+  .agent-backdrop,
+  .agent-fab,
+  .agent-msg {
+    transition: none;
+    animation: none;
+  }
+
+  .agent-typing i {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+
+/* ==========================================================================
+   12. 补充：工具调用详情、错误气泡、操作按钮组
+   ========================================================================== */
+
+/* 面板打开时锁住页面滚动，手机上不会出现"聊天时背景跟着滑" */
+html.agent-open,
+html.agent-open body {
+  overflow: hidden;
+}
+
+/* 助手出错时，气泡换成红调，和普通回复区分开 */
+.agent-error-bubble {
+  border: 1px solid rgba(176, 58, 52, 0.22);
+  background: #fbeeed;
+  color: var(--danger);
+}
+
+/* 确认卡底部的两个按钮：窄屏时上下排 */
+.agent-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+}
+
+/* 工具调用详情：默认收起，点开才占地方 */
+.agent-trace {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.agent-trace summary {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.agent-trace summary::-webkit-details-marker {
+  display: none;
+}
+
+.agent-trace summary::before {
+  content: '▸ ';
+  color: var(--accent);
+}
+
+.agent-trace[open] summary::before {
+  content: '▾ ';
+}
+
+.agent-trace ul {
+  margin: 0.45rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.agent-trace li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.4rem;
+  line-height: 1.5;
+}
+
+.agent-trace code {
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+}
+
+.agent-trace-args {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+}
+
+.agent-trace em {
+  font-style: normal;
+}
+
+.agent-trace em.ok {
+  color: var(--success);
+}
+
+.agent-trace em.bad {
+  color: var(--danger);
+}
+
+@media (max-width: 400px) {
+  .agent-action-buttons {
+    width: 100%;
+  }
+
+  .agent-action-buttons .btn {
+    flex: 1;
+  }
+}
+

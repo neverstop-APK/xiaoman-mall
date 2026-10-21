@@ -15,10 +15,12 @@
  */
 import { api, formatMoney } from './api-请求封装.js';
 import { cartStore } from './store-购物车状态.js';
-import { $, escapeHtml, toast, bindHeaderSearch, bindCartBadge, openDrawer } from './ui-通用界面工具.js';
+import { $, escapeHtml, toast, bindHeaderSearch, bindCartBadge, openDrawer, syncHeaderHeight } from './ui-通用界面工具.js';
 import { cardHtml } from './card-商品卡片.js';
 import { initCartDrawer } from './cartdrawer-购物车抽屉.js';
 import { initCheckout, openCheckout } from './checkout-结算下单.js';
+import { initAuthUI } from './authui-登录注册弹窗.js';
+import { initAgentPanel } from './agent-购物助手面板.js';
 
 const MAX_QUANTITY = 99;
 
@@ -179,10 +181,24 @@ function renderError(title, text) {
 
 /* ======================= 三、请求 ======================= */
 
+const RECENT_KEY = 'xm_recent_products';
+
+/** 记下"最近看过"：只存商品 id，最多 6 个，重复访问会提到最前面 */
+function rememberRecent(id) {
+  try {
+    const list = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+    const kept = Array.isArray(list) ? list.filter((item) => typeof item === 'string' && item !== id) : [];
+    localStorage.setItem(RECENT_KEY, JSON.stringify([id, ...kept].slice(0, 6)));
+  } catch (error) {
+    // localStorage 被禁用时不影响浏览，静默失败即可
+  }
+}
+
 async function loadProduct(id) {
   try {
     const item = await api.products.detail(id);
     renderProduct(item);
+    rememberRecent(item.id);
 
     // 相关推荐是"锦上添花"，失败了也不该让整页报错，所以单独 catch
     api.products.related(id)
@@ -269,8 +285,11 @@ function bindActions() {
 /* ======================= 五、启动 ======================= */
 
 function init() {
+  syncHeaderHeight();
   initCartDrawer();
   initCheckout();
+  initAuthUI();
+  initAgentPanel();
   bindCartBadge(cartStore);
   bindQuantity();
   bindActions();

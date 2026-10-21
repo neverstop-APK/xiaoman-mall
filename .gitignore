@@ -7,6 +7,13 @@ Thumbs.db
 *.log
 .verify/
 
-# 运行时生成的数据：购物车、订单。首次写入时程序会自动创建
+# 运行时生成的数据：购物车、订单、账号、会话、助手对话与 Trace
 server/data/carts-*.json
 server/data/orders-*.json
+server/data/users-*.json
+server/data/sessions-*.json
+server/data/conversations-*.json
+server/data/agent-traces.jsonl
+
+# 评测时生成的临时数据目录
+tests/eval/.tmpdata/

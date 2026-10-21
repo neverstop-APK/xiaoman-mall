@@ -1,0 +1,106 @@
+/* ==========================================================================
+   文件作用：登录 / 注册弹窗与账号菜单的样式
+   --------------------------------------------------------------------------
+   登录弹窗复用了 .modal / .field / .btn，这里只补它独有的部分：
+   登录注册切换页签、错误提示、右上角账号菜单。
+
+   对应考核点：八、注册 / 登录 / 退出、登录状态
+   ========================================================================== */
+
+/* 页签：登录 | 注册 */
+.auth-tabs {
+  display: flex;
+  gap: 4px;
+  padding-inline: var(--space-5);
+  border-bottom: 1px solid var(--line);
+}
+
+.auth-tab {
+  padding: 0.65em 0.2em;
+  margin-right: var(--space-4);
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  transition: color 0.16s var(--ease), border-color 0.16s var(--ease);
+}
+
+.auth-tab:hover {
+  color: var(--ink);
+}
+
+.auth-tab.is-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.auth-modal .modal-body {
+  gap: var(--space-3);
+}
+
+/* 错误提示：红底浅色，不打断表单填写 */
+.auth-error {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: #fbeae8;
+  color: var(--danger);
+  font-size: var(--fs-sm);
+}
+
+/* 顶栏按钮：登录后昵称用主色，提示"当前已登录" */
+#accountBtn.is-logged-in .icon-label {
+  color: var(--accent);
+  font-weight: 700;
+  max-width: 6em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 账号菜单：跟随按钮定位，JS 只负责设置 top / right */
+.account-menu {
+  position: fixed;
+  z-index: 90;
+  min-width: 190px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.account-menu-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px 10px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+}
+
+.account-menu-head strong {
+  font-size: var(--fs-sm);
+}
+
+.account-menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  text-align: left;
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  transition: background-color 0.15s var(--ease), color 0.15s var(--ease);
+}
+
+.account-menu-item:hover {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+@media (max-width: 520px) {
+  .account-menu {
+    min-width: 160px;
+  }
+}

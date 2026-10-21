@@ -14,6 +14,7 @@
  * 【对应考核点】4.1 后端基础功能 —— 参数校验与错误处理
  */
 const { HttpError, fail } = require('./lib/response-统一响应格式');
+const session = require('./lib/session-会话与Cookie');
 
 const routes = [];
 
@@ -67,8 +68,13 @@ function readBody(req) {
 
 /** 统一入口：找路由 -> 解析参数 -> 调用处理函数 -> 出错转 JSON */
 async function handle(req, res, url) {
-  // 允许跨域：方便以后把前端单独部署到别的域名
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // 跨域：带 Cookie 的请求不能用 *，要把浏览器发来的 Origin 原样返回
+  const origin = req.headers.origin;
+  if (origin) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Vary', 'Origin');
+  }
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Cart-Id');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
 
@@ -87,9 +93,14 @@ async function handle(req, res, url) {
   // 把 /api/products/:id 里的 id 取出来
   const matched = pathname.match(route.regex);
   const params = {};
-  route.keys.forEach((key, index) => {
-    params[key] = decodeURIComponent(matched[index + 1]);
-  });
+  try {
+    route.keys.forEach((key, index) => {
+      params[key] = decodeURIComponent(matched[index + 1]);
+    });
+  } catch {
+    // 形如 /api/products/%E0%A4%A 的畸形编码，不应该让服务挂掉
+    return fail(res, 400, 40010, '路径参数编码不合法');
+  }
 
   const query = Object.fromEntries(url.searchParams.entries());
 
@@ -102,8 +113,16 @@ async function handle(req, res, url) {
     }
   }
 
+  // 每次请求都根据 Cookie 找回当前用户，放在 ctx.user 里给各接口使用
+  let user = null;
   try {
-    await route.handler({ req, res, params, query, body });
+    user = session.currentUser(req);
+  } catch (err) {
+    console.error('[会话读取失败]', err.message);
+  }
+
+  try {
+    await route.handler({ req, res, params, query, body, user });
   } catch (err) {
     if (res.writableEnded) return; // 已经在处理函数里响应过了
     if (err instanceof HttpError) return fail(res, err.status, err.code, err.message);

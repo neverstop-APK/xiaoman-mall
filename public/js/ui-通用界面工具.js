@@ -162,6 +162,17 @@ export function bindHeaderSearch(handler) {
     handler(input.value.trim());
   });
 
+  // 键盘按 "/" 直接跳到搜索框，和 GitHub、MDN 的习惯一致
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== '/' || event.ctrlKey || event.metaKey || event.altKey) return;
+    const target = event.target;
+    const typing = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable);
+    if (typing) return;
+    event.preventDefault();
+    input.focus();
+    input.select();
+  });
+
   // 点清空按钮时把关键词一起清掉
   const clearBtn = $('#searchClear');
   if (clearBtn) {
@@ -181,6 +192,28 @@ export function bindCartBadge(store) {
     badge.textContent = count > 99 ? '99+' : String(count);
     badge.classList.toggle('is-visible', count > 0);
   });
+}
+
+/**
+ * 把页头的真实高度写进 --header-h。
+ * 为什么需要：吸顶导航在小屏会换行（logo + 图标 + 搜索框挤成两行），
+ * 高度从 68px 变成 110px 左右，CSS 里写死的高度会让筛选条、锚点跳转被挡住。
+ * 用 ResizeObserver 盯着页头，窗口变化、字体加载完都能自动更新。
+ */
+export function syncHeaderHeight() {
+  const header = $('.site-header');
+  if (!header) return;
+
+  const apply = () => {
+    document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+  };
+
+  apply();
+  if (typeof ResizeObserver === 'function') {
+    new ResizeObserver(apply).observe(header);
+  } else {
+    window.addEventListener('resize', apply, { passive: true });
+  }
 }
 
 /** 深拷贝一个小对象，避免改到共享的筛选状态（结构化克隆，浏览器原生） */

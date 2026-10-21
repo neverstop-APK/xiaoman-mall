@@ -37,7 +37,14 @@ const MIME = {
 
 function serveStatic(req, res, pathname) {
   // 1. 默认文档：访问 / 时返回首页
-  let rel = decodeURIComponent(pathname);
+  let rel = pathname;
+  try {
+    rel = decodeURIComponent(pathname);
+  } catch {
+    // 畸形 URL：直接 400，而不是抛异常让整个进程报错
+    res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
+    return res.end('400 路径编码不合法');
+  }
   if (rel === '/' || rel === '') rel = DEFAULT_PAGE;
 
   // 2. 防止目录穿越：规范化之后必须仍然在 public 目录里面
