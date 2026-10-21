@@ -28,14 +28,24 @@
 - Node.js 18 或更高版本（开发时用的是 Node 24）
 - 任意现代浏览器（Chrome / Edge / Firefox / Safari）
 
-### 启动
+### 启动（三种方式，任选一种）
+
+**方式一：双击启动（最简单）**
+
+在项目文件夹里双击 `启动商城.bat`。它会检查 Node.js、启动服务，并自动打开浏览器；关闭弹出的命令行窗口就停止服务。
+
+**方式二：命令行（推荐，不依赖 npm）**
 
 ```bash
-# 在项目根目录执行，不需要 npm install
-npm start
-
-# 或者直接用 node
+cd D:\dsh-market-model\xiaoman-mall
 node server/index-服务入口.js
+```
+
+**方式三：npm**
+
+```bash
+cd D:\dsh-market-model\xiaoman-mall
+npm start
 ```
 
 终端出现下面这行就成功了：
@@ -47,9 +57,21 @@ node server/index-服务入口.js
 浏览器打开 `http://127.0.0.1:3000` 即可。想换端口：
 
 ```bash
-PORT=4000 npm start        # macOS / Linux
-$env:PORT=4000; npm start  # Windows PowerShell
+# Windows PowerShell
+$env:PORT=4000; node server/index-服务入口.js
+# macOS / Linux
+PORT=4000 node server/index-服务入口.js
 ```
+
+### 网址打不开？按这个顺序检查
+
+1. **终端有没有显示「小满商城已启动」**：没有就是服务没起来，先看终端里的报错；
+2. **命令是不是在 `xiaoman-mall` 目录执行的**：在 `D:\dsh-market-model` 下执行会报找不到 package.json；
+3. **提示 `node 不是内部或外部命令`**：说明 Node.js 没装或没进 PATH，去装 Node.js 18+；
+4. **命令行窗口被关掉了**：服务跟着停，重新启动即可；
+5. **3000 端口被占用**：换端口启动，再访问 `http://127.0.0.1:4000`；
+6. **换一个地址试**：先试 `http://localhost:3000`，再试 `http://127.0.0.1:3000`；
+7. **代理 / VPN / 安全软件**可能拦截本地地址，临时关闭再试。
 
 > 商品封面是 `scripts/gen-covers-生成商品封面.js` 生成的 SVG，已经提交到仓库，正常启动不需要重新生成。
 > 只有想改配色或重新生成时才执行 `npm run covers`。
@@ -126,6 +148,7 @@ xiaoman-mall/
 │  └─ assets/products/            26 张商品封面 SVG
 ├─ scripts/                       开发脚本：生成商品封面
 │  └─ gen-covers-生成商品封面.js
+├─ 启动商城.bat                    双击启动：检查 Node、开服务、开浏览器
 ├─ package.json
 ├─ README.md
 └─ docs/                          接口文档、演示脚本、截图、PDF 文件说明书
