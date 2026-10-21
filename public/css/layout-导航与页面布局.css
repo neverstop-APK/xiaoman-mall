@@ -236,6 +236,12 @@
   letter-spacing: 0.05em;
 }
 
+.hero-stat-note {
+  margin-top: 0.55rem;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
 /* 首屏右侧：三张封面错落拼贴 */
 .hero-collage {
   display: grid;

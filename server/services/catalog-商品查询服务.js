@@ -115,10 +115,15 @@ function getById(id) {
 /** 首页分类入口：每个分类带上商品数量 */
 function categories() {
   const products = allProducts();
-  return allCategories().map((cat) => ({
-    ...cat,
-    count: products.filter((item) => item.category === cat.key).length
-  }));
+  return allCategories().map((cat) => {
+    const items = products.filter((item) => item.category === cat.key);
+    return {
+      ...cat,
+      count: items.length,
+      // count 是商品总数，available 是其中还有库存、能下单的数量
+      available: items.filter((item) => item.stock > 0).length
+    };
+  });
 }
 
 /** 首页推荐位：按销量取前 N 个 */

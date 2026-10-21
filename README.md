@@ -107,7 +107,7 @@ node tests/eval/run-评测.mjs   # 30 条 AI 助手评测，生成 docs/AI评测
 | 3.8 下单与结果页 | 订单号、商品、数量、单价、总价、时间、状态、模拟支付、结果页 | `public/js/checkout-结算下单.js`、`public/js/orders-订单页逻辑.js` |
 | 3.9 响应式 | flex + grid + 媒体查询 + clamp/rem；390px、250% 缩放验证无横向滚动 | `public/css/*.css` |
 | 4 商品 / 订单接口 | 24 个 HTTP 接口，统一 `code / message / data` 信封 | `server/routes/` |
-| 5 15–30 件差异化商品、不能全硬编码前端 | 26 件、6 个分类、价格 19–1699；全部来自接口 | `server/data/products-商品数据.json` |
+| 5 15–30 件差异化商品、不能全硬编码前端 | 26 件、6 个分类、价格 19–1699；其中 1 件库存 0 用于演示售罄，首页标注“26 件总数 / 25 件有货”；全部来自接口 | `server/data/products-商品数据.json` |
 | 6 讲清后端职责、请求流程、错误排查 | 第 3、4 节 + PDF 第 3、7 章 + 接口文档 | `docs/接口文档-前后端约定.md` |
 | 7 Prompt Engineering 加分 | 提示词、工具定义、失败案例与复盘 | `docs/Prompt-Engineering与AI协作.md` |
 | 8 注册 / 登录 / 退出 / 登录态 | scrypt 加盐哈希、HttpOnly Cookie、订单按用户隔离 | `server/services/auth-用户认证服务.js` |

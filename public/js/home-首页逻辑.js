@@ -67,6 +67,7 @@ const el = {
   recentClearBtn: $('#recentClearBtn'),
   heroCovers: [$('#heroCover1'), $('#heroCover2'), $('#heroCover3')],
   statProducts: $('#statProducts'),
+  stockNote: $('#stockNote'),
   statCategories: $('#statCategories')
 };
 
@@ -237,12 +238,16 @@ function renderPriceChips() {
 function renderCategoryGrid() {
   el.categoryGrid.innerHTML = categories
     .map((item) => {
+      const available = item.available ?? item.count;
+      const soldOut = item.count - available;
       return (
         '<button class="category-card" type="button" data-category="' + item.key + '">' +
           '<span class="category-emoji" aria-hidden="true">' + item.emoji + '</span>' +
           '<span class="category-name">' + escapeHtml(item.label) + '</span>' +
           '<span class="category-desc text-sm">' + escapeHtml(item.desc || '') + '</span>' +
-          '<span class="category-meta text-xs">' + item.count + ' 件商品</span>' +
+          '<span class="category-meta text-xs">' + item.count + ' 件商品' +
+            (soldOut > 0 ? ' · ' + soldOut + ' 件售罄' : '') +
+          '</span>' +
         '</button>'
       );
     })
@@ -275,8 +280,15 @@ async function loadBase() {
     ]);
 
     categories = categoryList;
-    el.statProducts.textContent = String(all.total);
+    const total = all.total;
+    const available = categoryList.reduce((sum, item) => sum + (item.available ?? item.count), 0);
+    el.statProducts.textContent = String(total);
     el.statCategories.textContent = String(categoryList.length);
+    if (el.stockNote) {
+      el.stockNote.textContent = available < total
+        ? '共 ' + total + ' 件，' + available + ' 件有货，' + (total - available) + ' 件已售罄'
+        : '共 ' + total + ' 件，全部有货';
+    }
 
     renderCategoryChips();
     renderPriceChips();

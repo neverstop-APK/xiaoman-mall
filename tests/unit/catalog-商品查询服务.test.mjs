@@ -180,6 +180,7 @@ test('categories / recommendations / related / priceRange：辅助查询正确',
     ['户外', 1]
   ]);
   assert.equal(categories[0].label, '数码');
+  assert.deepEqual(categories.map((item) => item.available), [3, 2, 1]);
 
   assert.deepEqual(catalog.recommendations(2).map((item) => item.id), ['t02', 't06']);
   assert.equal(catalog.recommendations().length, 4);

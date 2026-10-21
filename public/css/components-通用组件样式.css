@@ -265,17 +265,17 @@
   box-shadow: var(--shadow);
 }
 
-.category-card .emoji {
+.category-card .category-emoji {
   font-size: 1.5rem;
   line-height: 1.4;
 }
 
-.category-card .name {
+.category-card .category-name {
   font-weight: 700;
   font-size: 1rem;
 }
 
-.category-card .meta {
+.category-card .category-meta {
   font-size: var(--fs-xs);
   color: var(--muted);
 }
