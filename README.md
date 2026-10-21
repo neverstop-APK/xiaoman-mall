@@ -166,19 +166,50 @@ xiaoman-mall/
 │  ├─ product-商品详情页.html
 │  ├─ orders-我的订单页.html
 │  ├─ 404-页面不存在.html
-│  ├─ css/                         8 个样式文件，按五层组织
+│  ├─ css/                         7 个样式文件：五个基础层 + 登录 + 助手
 │  └─ js/                          13 个 ES Module，一个文件一件事
-├─ tests/
-│  ├─ unit/                        37 条单元测试
-│  ├─ api/                         9 条真实 HTTP 集成测试
-│  └─ eval/                        30 条 AI 评测 + 报告生成器
-├─ deploy/                         systemd、Nginx、Docker、环境变量模板
-├─ docs/                           说明书 PDF/HTML、接口、部署、演示、评测、截图
+├─ tests/                          46 条自动测试 + 30 条 AI 评测
+│  ├─ unit/                        4 个 service 单元测试（37 条）
+│  ├─ api/api-接口集成.test.mjs    真实进程 + HTTP + Cookie + SSE（9 条）
+│  ├─ eval/                        30 条用例、执行器、最近结果
+│  └─ 测试辅助-临时数据目录.mjs    测试用 XM_DATA_DIR，不碰演示数据
+├─ deploy/                         上线用：systemd / Nginx / Docker / 环境变量
+│  ├─ xiaoman-mall.service         systemd 托管，非 root、崩溃自动拉起
+│  ├─ nginx-小满商城.conf          HTTPS、反向代理、SSE 不缓冲
+│  ├─ Dockerfile / docker-compose.yml
+│  └─ xiaoman-mall.env.example     生产环境变量模板
+├─ docs/                           说明书、接口、阅读路线、部署、演示、评测、截图
 ├─ scripts/gen-covers-生成商品封面.js
 ├─ 启动商城.bat
 ├─ package.json
 └─ README.md
 ```
+
+### 文件夹速查
+
+每个文件夹里都有一份 `说明-这个文件夹装什么.md`，写清了“装了什么、和谁配合、怎么读”。
+
+| 文件夹 | 装什么 | 详细 |
+| --- | --- | --- |
+| `server/` | 入口、路由、数据、工具、服务、接口、AI 助手 | [说明](server/说明-这个文件夹装什么.md) |
+| `server/agent/` | AI 助手的编排、8 个工具、本地规则、大模型适配、会话 | [说明](server/agent/说明-这个文件夹装什么.md) |
+| `server/data/` | 7 张 JSON 表 + 助手调用日志 | [说明](server/data/说明-这个文件夹装什么.md) |
+| `server/lib/` | 统一响应、JSON 存储、静态文件、Cookie 会话 | [说明](server/lib/说明-这个文件夹装什么.md) |
+| `server/services/` | 商品、购物车、订单、认证四组业务规则 | [说明](server/services/说明-这个文件夹装什么.md) |
+| `server/routes/` | 24 个接口的参数层 | [说明](server/routes/说明-这个文件夹装什么.md) |
+| `public/` | 4 个页面、7 个样式、13 个模块、商品封面 | [说明](public/说明-这个文件夹装什么.md) |
+| `public/css/` | 基础、布局、组件、页面、补充、登录、助手 | [说明](public/css/说明-这个文件夹装什么.md) |
+| `public/js/` | 请求、状态、登录、组件、四个页面入口 | [说明](public/js/说明-这个文件夹装什么.md) |
+| `public/assets/` | 静态资源 | [说明](public/assets/说明-这个文件夹装什么.md) |
+| `public/assets/products/` | 26 张商品封面 SVG | [说明](public/assets/products/说明-这个文件夹装什么.md) |
+| `scripts/` | 生成商品封面的脚本 | [说明](scripts/说明-这个文件夹装什么.md) |
+| `tests/` | 46 条自动测试 + 30 条 AI 评测 | [说明](tests/说明-这个文件夹装什么.md) |
+| `tests/unit/` | 4 个 service 单元测试（37 条） | [说明](tests/unit/说明-这个文件夹装什么.md) |
+| `tests/api/` | 真实进程的 HTTP 集成测试（9 条） | [说明](tests/api/说明-这个文件夹装什么.md) |
+| `tests/eval/` | AI 评测用例、执行器、结果 | [说明](tests/eval/说明-这个文件夹装什么.md) |
+| `deploy/` | systemd、Nginx、Docker、环境变量模板 | [说明](deploy/说明-这个文件夹装什么.md) |
+| `docs/` | 说明书、接口、阅读路线、部署、演示、评测 | [说明](docs/说明-这个文件夹装什么.md) |
+| `docs/screenshots/` | 10 张界面截图 | [说明](docs/screenshots/说明-这个文件夹装什么.md) |
 
 ### 按功能找文件
 
@@ -274,7 +305,7 @@ xiaoman-mall/
 
 ## 六、数据、测试与 AI 评测
 
-### 六个 JSON 文件
+### 七张 JSON 表
 
 | 文件 | 内容 |
 | --- | --- |
@@ -284,6 +315,9 @@ xiaoman-mall/
 | `sessions-用户会话.json` | token 的 SHA-256 摘要、userId、过期时间 |
 | `carts-购物车数据.json` | cartId、items、创建/更新时间 |
 | `orders-订单数据.json` | 订单号、userId、商品快照、金额、收货信息、状态与时间 |
+| `conversations-助手会话.json` | 会话 id、userId、消息、memory、待确认动作 |
+
+`agent-traces.jsonl` 是助手每次调用的 Trace，一行一条，不属于这七张表。
 
 商品和分类是种子数据，不要删；其余是运行时数据，删掉后第一次写入会自动重建。想清空演示数据：
 
@@ -330,7 +364,7 @@ Remove-Item server/data/carts-*.json, server/data/orders-*.json, \
 - 登录生成 32 字节随机 token，只把 SHA-256 摘要存进 `sessions`，原始 token 放进 `xm_session` Cookie；
 - Cookie 是 `HttpOnly; SameSite=Lax`，HTTPS 下自动加 `Secure`，JS 读不到；
 - 订单带 `userId`：`GET /api/orders` 只返回自己的；查看 / 支付 / 取消别人的订单返回 403；
-- 未登录仍可浏览、加购、下单，订单号只记在当前浏览器；登录后订单跟着账号走。
+- 未登录可浏览、加购、下单，但生成的是游客订单：只能凭订单号查看，不会出现在账号的订单列表里；登录后下的单才跟账号走。
 
 ### AI 购物助手
 
@@ -417,7 +451,7 @@ Remove-Item server/data/carts-*.json, server/data/orders-*.json, \
 | [文件说明书（PDF）](docs/小满商城-文件说明书.pdf) | 19 页，逐个文件讲作用与请求流程 |
 | [文件说明书（HTML）](docs/说明书-小满商城.html) | 可打印源文件，A4 分页 |
 | [接口文档](docs/接口文档-前后端约定.md) | 24 个接口、错误码、排查 |
-| [阅读路线](docs/阅读路线-从跑起来到讲清楚.md) | 从当用户到读代码的 7 站 |
+| [阅读路线](docs/阅读路线-从跑起来到讲清楚.md) | 从当用户到读代码的 11 站（含账号、AI、测试） |
 | [演示脚本](docs/演示脚本-答辩怎么讲.md) | 8 分钟演示顺序与追问 |
 | [AI 评测报告](docs/AI评测报告.md) | 30 条用例、指标、Trace |
 | [Prompt Engineering](docs/Prompt-Engineering与AI协作.md) | 提示词、工具设计、失败复盘 |

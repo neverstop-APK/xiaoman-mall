@@ -648,7 +648,7 @@ agent-购物助手.js  选模式、读会话、循环
   <h2>数据与测试</h2>
   <p class="lead">这一节回答两个问题：数据放在哪、怎么证明它没坏。</p>
 
-  <h3>六个 JSON 文件</h3>
+  <h3>七张 JSON 表</h3>
   <table>
     <tr><th style="width:34%">文件</th><th>内容</th></tr>
     <tr><td class="k">products-商品数据.json</td><td>26 件商品的 id、名称、品牌、分类、子分类、价格、原价、库存、评分、销量、emoji、上架时间、标签、搜索词、简介、详细介绍、卖点、封面路径</td></tr>
@@ -657,6 +657,7 @@ agent-购物助手.js  选模式、读会话、循环
     <tr><td class="k">sessions-用户会话.json</td><td>token 的 SHA-256 摘要、userId、过期时间</td></tr>
     <tr><td class="k">carts-购物车数据.json</td><td>cartId、items、创建与更新时间</td></tr>
     <tr><td class="k">orders-订单数据.json</td><td>订单号、userId、商品快照、金额、收货信息、状态与时间</td></tr>
+    <tr><td class="k">conversations-助手会话.json</td><td>会话 id、userId、消息、memory、待确认动作</td></tr>
   </table>
 
   <h3>46 条测试：单元 + 真实 HTTP</h3>
