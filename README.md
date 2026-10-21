@@ -7,7 +7,8 @@
 - 数据：26 件商品存在 JSON 文件里，由后端读取，前端只通过接口拿数据；
 - 账号：注册、登录、退出、HttpOnly 会话，订单跟着账号走；
 - AI：右下角「问问小满」购物助手，工具调用、多轮约束、确认后下单、SSE 流式；
-- 设计：暖白底色 + 陶土红点缀，衬线标题，卡片式布局，桌面 / 平板 / 手机三档响应式。
+- 设计：暖白底色 + 陶土红点缀，衬线标题，卡片式布局，桌面 / 平板 / 手机三档响应式；
+- 页面分工：首页只放推荐、热卖和专题位，搜索、筛选、排序、分页集中在「全部商品」页。
 
 ![首页](docs/screenshots/home.png)
 
@@ -98,10 +99,10 @@ node tests/eval/run-评测.mjs   # 30 条 AI 助手评测，生成 docs/AI评测
 | 考核要求 | 实现情况 | 在哪里 |
 | --- | --- | --- |
 | 3.1 原生或框架、Git 仓库 | 原生 HTML/CSS/ESM；本地 Git 仓库，按约定暂未推 GitHub | 项目根目录 |
-| 3.2 导航、图标悬浮、推荐、列表、分类、搜索、购物车入口 | 三个导航图标 + 账号 + 购物车；推荐 4 件、列表 8 件一页、6 个分类、搜索框 | `public/index-首页.html`、`public/js/home-首页逻辑.js` |
+| 3.2 导航、图标悬浮、推荐、列表、分类、搜索、购物车入口 | 三个导航图标 + 账号 + 购物车；首页推荐 4 件、热卖 8 件；全部商品页每页 8 件；6 个分类；搜索框 | `public/index-首页.html`、`public/products-全部商品页.html` |
 | 3.3 卡片字段 | 图片、名称、价格、简介、标签、分类 | `public/js/card-商品卡片.js` |
 | 3.4 关键词搜索 | 匹配名称、品牌、简介、标签、搜索词，支持防抖与空态 | `server/services/catalog-商品查询服务.js` |
-| 3.5 至少一种筛选 | 分类 + 价格区间，可叠加，五种排序，条件写进地址栏 | `public/js/home-首页逻辑.js` |
+| 3.5 至少一种筛选 | 分类 + 价格区间，可叠加，五种排序，条件写进地址栏 | `public/js/products-全部商品页逻辑.js` |
 | 3.6 商品详情 | 名称、图片、价格、原价、折扣、介绍、分类、库存、规格、加购 | `public/product-商品详情页.html` |
 | 3.7 侧拉购物车 | 添加、删除、改数量、单项小计、总金额、清空、免运费进度 | `public/js/cartdrawer-购物车抽屉.js` |
 | 3.8 下单与结果页 | 订单号、商品、数量、单价、总价、时间、状态、模拟支付、结果页 | `public/js/checkout-结算下单.js`、`public/js/orders-订单页逻辑.js` |
@@ -197,9 +198,9 @@ xiaoman-mall/
 | `server/lib/` | 统一响应、JSON 存储、静态文件、Cookie 会话 | [说明](server/lib/说明-这个文件夹装什么.md) |
 | `server/services/` | 商品、购物车、订单、认证四组业务规则 | [说明](server/services/说明-这个文件夹装什么.md) |
 | `server/routes/` | 24 个接口的参数层 | [说明](server/routes/说明-这个文件夹装什么.md) |
-| `public/` | 4 个页面、7 个样式、13 个模块、商品封面 | [说明](public/说明-这个文件夹装什么.md) |
-| `public/css/` | 基础、布局、组件、页面、补充、登录、助手 | [说明](public/css/说明-这个文件夹装什么.md) |
-| `public/js/` | 请求、状态、登录、组件、四个页面入口 | [说明](public/js/说明-这个文件夹装什么.md) |
+| `public/` | 5 个页面、8 个样式、14 个模块、商品封面 | [说明](public/说明-这个文件夹装什么.md) |
+| `public/css/` | 基础、布局、组件、页面、补充、登录、助手、目录页 | [说明](public/css/说明-这个文件夹装什么.md) |
+| `public/js/` | 请求、状态、登录、组件、五个页面入口 | [说明](public/js/说明-这个文件夹装什么.md) |
 | `public/assets/` | 静态资源 | [说明](public/assets/说明-这个文件夹装什么.md) |
 | `public/assets/products/` | 26 张商品封面 SVG | [说明](public/assets/products/说明-这个文件夹装什么.md) |
 | `scripts/` | 生成商品封面的脚本 | [说明](scripts/说明-这个文件夹装什么.md) |
@@ -209,13 +210,13 @@ xiaoman-mall/
 | `tests/eval/` | AI 评测用例、执行器、结果 | [说明](tests/eval/说明-这个文件夹装什么.md) |
 | `deploy/` | systemd、Nginx、Docker、环境变量模板 | [说明](deploy/说明-这个文件夹装什么.md) |
 | `docs/` | 说明书、接口、阅读路线、部署、演示、评测 | [说明](docs/说明-这个文件夹装什么.md) |
-| `docs/screenshots/` | 10 张界面截图 | [说明](docs/screenshots/说明-这个文件夹装什么.md) |
+| `docs/screenshots/` | 12 张界面截图 | [说明](docs/screenshots/说明-这个文件夹装什么.md) |
 
 ### 按功能找文件
 
 | 想改什么 | 先看哪里 |
 | --- | --- |
-| 搜索、筛选、排序、分页 | `server/services/catalog-商品查询服务.js` → `public/js/home-首页逻辑.js` |
+| 搜索、筛选、排序、分页 | `server/services/catalog-商品查询服务.js` → `public/js/products-全部商品页逻辑.js` |
 | 加购、改数量、删除、金额 | `server/services/cart-购物车服务.js` → `public/js/cartdrawer-购物车抽屉.js` |
 | 运费、下单、库存、支付、取消 | `server/services/orders-订单服务.js` → `public/js/checkout-结算下单.js` |
 | 注册、登录、Cookie、订单归属 | `server/services/auth-用户认证服务.js`、`server/lib/session-会话与Cookie.js` |
@@ -452,6 +453,7 @@ Remove-Item server/data/carts-*.json, server/data/orders-*.json, \
 | [文件说明书（HTML）](docs/说明书-小满商城.html) | 可打印源文件，A4 分页 |
 | [接口文档](docs/接口文档-前后端约定.md) | 24 个接口、错误码、排查 |
 | [阅读路线](docs/阅读路线-从跑起来到讲清楚.md) | 从当用户到读代码的 11 站（含账号、AI、测试） |
+| [代码地图](docs/代码地图-类名与行为索引.md) | 213 个类名 / 88 个 id / 20 个 data-* 分别指向哪里；读代码卡住时按名字查 |
 | [演示脚本](docs/演示脚本-答辩怎么讲.md) | 8 分钟演示顺序与追问 |
 | [AI 评测报告](docs/AI评测报告.md) | 30 条用例、指标、Trace |
 | [Prompt Engineering](docs/Prompt-Engineering与AI协作.md) | 提示词、工具设计、失败复盘 |

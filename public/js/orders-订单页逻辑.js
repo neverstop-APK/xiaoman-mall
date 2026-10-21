@@ -108,7 +108,7 @@ function heroHtml(order) {
     actions.push('<button class="btn btn-ghost" type="button" data-cancel="' + escapeHtml(order.id) + '">取消订单</button>');
   }
   actions.push('<button class="btn btn-ghost" type="button" data-copy="' + escapeHtml(order.id) + '">复制订单号</button>');
-  actions.push('<a class="btn btn-ghost" href="./index-首页.html#list">继续购物</a>');
+  actions.push('<a class="btn btn-ghost" href="./products-全部商品页.html">继续购物</a>');
 
   return [
     '<section class="order-hero ' + view.cls + '">',
@@ -138,7 +138,7 @@ function showError(title, text) {
     '<span class="empty-emoji" aria-hidden="true">🧾</span>',
     '<span class="empty-title">' + escapeHtml(title) + '</span>',
     '<span class="text-sm text-muted">' + escapeHtml(text) + '</span>',
-    '<a class="btn btn-ghost" href="./index-首页.html#list">去逛逛</a>',
+    '<a class="btn btn-ghost" href="./products-全部商品页.html">去逛逛</a>',
     '</div>'
   ].join('');
 }
@@ -205,7 +205,7 @@ async function loadHistory() {
         '还没有订单',
         '登录后订单会跟着账号走，换设备也能看到；未登录时只能查到这台设备下过的单。',
         '<button class="btn btn-primary" type="button" data-open-login>登录 / 注册</button>' +
-          '<a class="btn btn-ghost" href="./index-首页.html#list">先去逛逛</a>'
+          '<a class="btn btn-ghost" href="./products-全部商品页.html">先去逛逛</a>'
       );
       return;
     }
@@ -223,7 +223,7 @@ async function loadHistory() {
       '还没有订单',
       user ? '挑一件喜欢的东西，下单后会出现在这里。' : '登录后可跨设备查看订单。',
       user
-        ? '<a class="btn btn-primary" href="./index-首页.html#list">去挑点东西</a>'
+        ? '<a class="btn btn-primary" href="./products-全部商品页.html">去挑点东西</a>'
         : '<button class="btn btn-primary" type="button" data-open-login>登录 / 注册</button>'
     );
     return;
@@ -335,7 +335,7 @@ function bindEvents() {
 
   bindHeaderSearch(function (keyword) {
     if (!keyword) return;
-    location.href = './index-首页.html?keyword=' + encodeURIComponent(keyword) + '#list';
+    location.href = './products-全部商品页.html?keyword=' + encodeURIComponent(keyword);
   });
 
   document.addEventListener('click', function (event) {

@@ -483,3 +483,68 @@
     flex: 1 1 160px;
   }
 }
+
+/* ================= 首页专题位（“广告位”） ================= */
+.spot-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.spot-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 200px;
+  padding: clamp(1.4rem, 3vw, 2.4rem);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(194, 84, 43, 0.12), transparent 60%),
+    var(--surface);
+  transition: transform 0.2s var(--ease), border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.spot-card.is-warm {
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(214, 170, 90, 0.2), transparent 60%),
+    var(--surface);
+}
+
+.spot-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow);
+}
+
+.spot-title {
+  font-family: "Songti SC", "SimSun", "Noto Serif SC", "Source Han Serif SC", serif;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.spot-text {
+  max-width: 30ch;
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+}
+
+.spot-link {
+  margin-top: 0.4rem;
+  color: var(--accent-dark);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+@media (max-width: 720px) {
+  .spot-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .spot-card {
+    min-height: 0;
+  }
+}

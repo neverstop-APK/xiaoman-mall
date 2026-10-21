@@ -296,7 +296,7 @@ function init() {
 
   // 详情页的搜索框：跳回首页，把关键词交给首页的筛选逻辑
   bindHeaderSearch((keyword) => {
-    window.location.href = './index-首页.html?keyword=' + encodeURIComponent(keyword) + '#list';
+    window.location.href = './products-全部商品页.html?keyword=' + encodeURIComponent(keyword);
   });
 
   cartStore.init().catch(() => {});

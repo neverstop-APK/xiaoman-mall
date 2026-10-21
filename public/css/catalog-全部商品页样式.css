@@ -1,0 +1,79 @@
+/* ==========================================================================
+   文件作用：全部商品页 —— 只负责“完整目录”的页头与工具条排版
+   --------------------------------------------------------------------------
+   商品卡、筛选 chip、分页、空状态都复用 components 里的通用样式，
+   这里只补页头、结果行和窄屏下的排序下拉宽度。
+
+   对应考核点：3.2 商品列表、3.4 搜索、3.5 筛选、3.9 响应式
+   ========================================================================== */
+
+.catalog-hero {
+  padding-block: clamp(2.4rem, 5vw, 4rem) 1.2rem;
+}
+
+.catalog-title {
+  margin-top: 0.35rem;
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.catalog-lede {
+  max-width: 54ch;
+  margin-top: var(--space-3);
+  color: var(--ink-2);
+  font-size: var(--fs-sm);
+  line-height: 1.8;
+}
+
+.catalog-section {
+  padding-top: 1rem;
+}
+
+.catalog-filter-bar {
+  margin-bottom: var(--space-3);
+}
+
+.catalog-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  margin-bottom: var(--space-4);
+}
+
+.catalog-back {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  transition: color 0.16s var(--ease);
+}
+
+.catalog-back:hover {
+  color: var(--accent-dark);
+}
+
+.catalog-empty-note {
+  margin-top: var(--space-3);
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+@media (max-width: 640px) {
+  .catalog-hero {
+    padding-block: 1.8rem 0.8rem;
+  }
+
+  .catalog-filter-bar .filter-spacer {
+    display: none;
+  }
+
+  .catalog-filter-bar .filter-select {
+    width: 100%;
+    max-width: none;
+  }
+
+  .catalog-meta {
+    align-items: flex-start;
+  }
+}

@@ -4,5 +4,5 @@ import { bindHeaderSearch } from './ui-通用界面工具.js';
 
 bindHeaderSearch((keyword) => {
   const query = keyword ? '?keyword=' + encodeURIComponent(keyword) : '';
-  window.location.href = './index-首页.html' + query + '#list';
+  window.location.href = './products-全部商品页.html' + query;
 });
