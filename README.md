@@ -107,6 +107,8 @@ PORT=4000 node server/index-服务入口.js
 
 每个文件夹里还放了一张 `说明-这个文件夹装什么.md`：打开任意目录，第一眼就能知道这个文件夹负责什么、里面有哪些文件、和上下游怎么配合。下面的目录树和速查表是同样内容的汇总。
 
+想按顺序把代码读一遍，看 [阅读路线：从跑起来到讲清楚](docs/阅读路线-从跑起来到讲清楚.md)：从当用户、读契约，到两条链路、自测改动，共 7 站。
+
 ```
 xiaoman-mall/
 ├─ server/                        后端（只在 Node 里运行）
@@ -151,7 +153,7 @@ xiaoman-mall/
 ├─ 启动商城.bat                    双击启动：检查 Node、开服务、开浏览器
 ├─ package.json
 ├─ README.md
-└─ docs/                          接口文档、演示脚本、截图、PDF 文件说明书
+└─ docs/                          接口文档、阅读路线、演示脚本、截图、PDF 文件说明书
 ```
 
 
@@ -169,7 +171,7 @@ xiaoman-mall/
 | `public/js/` | 9 个 ES Module：请求、状态、模板、组件、页面入口 | `api-请求封装.js` |
 | `public/assets/` | 静态资源，目前是商品封面 | `products/` |
 | `public/assets/products/` | 26 张商品封面 SVG，脚本生成 | 任意一张 SVG |
-| `docs/` | PDF 说明书、接口文档、演示脚本、截图 | `小满商城-文件说明书.pdf` |
+| `docs/` | PDF 说明书、阅读路线、接口文档、演示脚本、截图 | `小满商城-文件说明书.pdf` |
 | `docs/screenshots/` | 8 张界面截图，README 和 PDF 引用 | `home.png` |
 | `scripts/` | 开发时手动跑的工具：生成商品封面 | `gen-covers-生成商品封面.js` |
 
