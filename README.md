@@ -83,17 +83,19 @@ $env:PORT=4000; npm start  # Windows PowerShell
 
 每个文件具体做什么、一次请求怎么走、用到了哪些知识点，另有一份图文版 [文件说明书（PDF）](docs/小满商城-文件说明书.pdf)。
 
+每个文件夹里还放了一张 `说明-这个文件夹装什么.md`：打开任意目录，第一眼就能知道这个文件夹负责什么、里面有哪些文件、和上下游怎么配合。下面的目录树和速查表是同样内容的汇总。
+
 ```
 xiaoman-mall/
-├─ server/                        后端
+├─ server/                        后端（只在 Node 里运行）
 │  ├─ index-服务入口.js            启动 HTTP 服务，分发 /api 与静态文件
 │  ├─ router-迷你路由.js           极简路由：注册路径、解析参数、统一错误处理
-│  ├─ data/
+│  ├─ data/                        数据表：商品/分类只读，购物车/订单运行时生成
 │  │  ├─ products-商品数据.json     26 件商品
 │  │  ├─ categories-商品分类.json   6 个分类
 │  │  ├─ carts-购物车数据.json      运行时生成
 │  │  └─ orders-订单数据.json       运行时生成
-│  ├─ lib/
+│  ├─ lib/                         通用工具：响应格式、JSON 存储、静态文件
 │  │  ├─ response-统一响应格式.js   ok / fail / HttpError / sendJson
 │  │  ├─ store-JSON数据存储.js      读写 JSON、内存缓存、按表名找文件
 │  │  └─ static-静态文件服务.js     返回 HTML/CSS/JS/SVG，处理 404 与 304
@@ -122,11 +124,31 @@ xiaoman-mall/
 │  │  ├─ checkout-结算下单.js      收货信息校验、下单、模拟支付
 │  │  └─ orders-订单页逻辑.js      结果页与历史订单
 │  └─ assets/products/            26 张商品封面 SVG
-├─ scripts/gen-covers-生成商品封面.js
-├─ docs/                          接口文档、演示脚本、截图、文件说明书
+├─ scripts/                       开发脚本：生成商品封面
+│  └─ gen-covers-生成商品封面.js
 ├─ package.json
-└─ README.md
+├─ README.md
+└─ docs/                          接口文档、演示脚本、截图、PDF 文件说明书
 ```
+
+
+### 文件夹速查
+
+| 文件夹 | 大概装什么 | 进去先看 |
+| --- | --- | --- |
+| `server/` | 后端全部代码：入口、路由、接口、服务、数据、工具 | `index-服务入口.js` |
+| `server/data/` | 四张 JSON 表：商品、分类、购物车、订单 | `products-商品数据.json` |
+| `server/lib/` | 与业务无关的工具：统一响应、JSON 存储、静态文件 | `response-统一响应格式.js` |
+| `server/routes/` | 14 个 HTTP 接口，只取参数、调服务、返回 | `products-商品接口.js` |
+| `server/services/` | 搜索筛选、购物车、订单金额与库存的规则 | `catalog-商品查询服务.js` |
+| `public/` | 4 个页面 + CSS/JS/图片，浏览器直接加载 | `index-首页.html` |
+| `public/css/` | 5 层样式：基础、布局、组件、页面、补充 | `base-设计变量与基础样式.css` |
+| `public/js/` | 9 个 ES Module：请求、状态、模板、组件、页面入口 | `api-请求封装.js` |
+| `public/assets/` | 静态资源，目前是商品封面 | `products/` |
+| `public/assets/products/` | 26 张商品封面 SVG，脚本生成 | 任意一张 SVG |
+| `docs/` | PDF 说明书、接口文档、演示脚本、截图 | `小满商城-文件说明书.pdf` |
+| `docs/screenshots/` | 8 张界面截图，README 和 PDF 引用 | `home.png` |
+| `scripts/` | 开发时手动跑的工具：生成商品封面 | `gen-covers-生成商品封面.js` |
 
 ## 四、三条关键链路
 
