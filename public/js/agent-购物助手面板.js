@@ -453,7 +453,7 @@ function renderOrderResult(order) {
   return box;
 }
 
-/** 工具调用详情：默认收起，答辩时展开就能看到"模型调了什么、传了什么参数" */
+/** 工具调用详情：默认收起，展开就能看到"模型调了什么、传了什么参数" */
 function renderTrace(msg, toolCalls, durationMs) {
   if (!Array.isArray(toolCalls) || !toolCalls.length || msg.traceEl) return;
   const details = document.createElement('details');
