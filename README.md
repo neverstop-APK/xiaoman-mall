@@ -250,6 +250,9 @@ sqlite3 /tmp/xiaoman-mall.db "select count(*) from products;"   # 26
 | [阅读路线](docs/阅读路线-从跑起来到讲清楚.md) | 第一次读代码，按顺序走 |
 | [接口文档](docs/接口文档-前后端约定.md) | 调接口、查错误码 |
 | [演示脚本](docs/演示脚本-答辩怎么讲.md) | 8 分钟怎么演示、怎么答追问 |
+| [答辩完整文稿](docs/答辩-完整文稿.md) | 想按完整讲稿顺一遍时 |
+| [答辩需求拆解](docs/答辩-需求拆解四段稿.md) | 把考核点讲成四段话时 |
+| [考核点对照](docs/考核点对照.md) | 核对每条要求落在哪个文件 |
 | [AI 评测报告](docs/AI评测报告.md) | 看 30 条用例和指标 |
 | [Prompt Engineering](docs/Prompt-Engineering与AI协作.md) | 看提示词、工具设计和失败复盘 |
 | [部署说明](docs/部署-服务器与域名.md) | 放到自己的服务器和域名上 |
