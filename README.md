@@ -4,6 +4,8 @@
 
 前端是原生 HTML / CSS / ES Module，后端是 Node.js 原生 `http`，26 件商品放在 JSON 文件里由后端读取。没有框架、没有构建步骤、没有 `npm install`。
 
+> 在线地址：<https://chuangchengwujin.cn>（演示环境，数据可能被重置）
+>
 > 这是一个前端项目考核作品，不是生产系统。能做什么、没做什么，最后都写清楚了。
 
 ![小满商城首页](docs/screenshots/home.png)
@@ -190,14 +192,14 @@ xiaoman-mall/
 
 `deploy/` 里已经准备好 systemd、Nginx、Docker 和环境变量模板。步骤概要：
 
-1. 服务器装 Node.js 18+，项目放到 `/var/www/xiaoman-mall`；
+1. 服务器装 Node.js 18+，项目放到 `/opt/xiaoman-mall`（systemd 示例的 `WorkingDirectory` 写的是 `/opt/xiaoman-mall/xiaoman-mall`，按你的实际目录改）；
 2. 用 `systemd` 托管，非 root、开机自启、崩溃拉起；
-3. Nginx 反代 `127.0.0.1:3000`，配置 HTTPS；SSE 要关 `proxy_buffering`；
+3. Nginx 反代 `127.0.0.1:3000`，配置 HTTPS；SSE 要关 `proxy_buffering`。线上这台机器 3000 已被别的服务占用，所以小满用 `PORT=3100`，反代端口跟着改；
 4. API Key 只放服务器环境变量文件，权限 600，不进仓库。
 
 境内服务器绑定正式域名通常要先完成 ICP 备案，境外服务器不需要。完整步骤见 [部署说明](docs/部署-服务器与域名.md)。
 
-> 目前没有在线 Demo，仓库里是本地可跑的版本；部署配置是准备好的，不是“已经上线”。
+> 在线演示：<https://chuangchengwujin.cn>。演示数据可能被重置；这台机器的 HTTPS 证书是 DNS-01 手动签发的，到期前要按部署文档续期。
 
 ## AI Coding Process
 
@@ -218,7 +220,7 @@ xiaoman-mall/
 - 支付是模拟的，不接真实支付；没有商品管理后台、图片上传、邮箱验证、多租户；
 - AI 本地模式是规则引擎，不是大模型；大模型模式需要 API Key，模型对比还没实跑；
 - 商品封面是脚本生成的 SVG，不是实拍图；
-- 没有在线 Demo；要上线按 `deploy/` 和部署文档操作。
+- 在线 Demo 是演示环境，数据可能被重置；AI 默认走本地规则，不调用外部模型。
 
 ## 考核点对照
 
