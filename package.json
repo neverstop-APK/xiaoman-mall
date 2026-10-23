@@ -8,9 +8,9 @@
     "start": "node server/index-服务入口.js",
     "dev": "node --watch server/index-服务入口.js",
     "covers": "node scripts/gen-covers-生成商品封面.js",
-    "test": "node --test \"tests/unit/*.test.mjs\" \"tests/api/*.test.mjs\"",
-    "test:unit": "node --test \"tests/unit/*.test.mjs\"",
-    "test:api": "node --test \"tests/api/*.test.mjs\"",
+    "test": "node --test tests/unit/auth-用户认证服务.test.mjs tests/unit/cart-购物车服务.test.mjs tests/unit/catalog-商品查询服务.test.mjs tests/unit/orders-订单服务.test.mjs tests/api/api-接口集成.test.mjs",
+    "test:unit": "node --test tests/unit/auth-用户认证服务.test.mjs tests/unit/cart-购物车服务.test.mjs tests/unit/catalog-商品查询服务.test.mjs tests/unit/orders-订单服务.test.mjs",
+    "test:api": "node --test tests/api/api-接口集成.test.mjs",
     "test:eval": "node tests/eval/run-评测.mjs"
   },
   "engines": {
