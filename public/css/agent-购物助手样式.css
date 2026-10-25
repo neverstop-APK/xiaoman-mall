@@ -655,16 +655,6 @@
   height: 1.05rem;
 }
 
-.agent-foot {
-  margin: 0;
-  padding: 0 0.9rem 0.6rem;
-  color: var(--muted);
-  font-size: 0.7rem;
-  line-height: 1.4;
-  text-align: center;
-  background: var(--surface);
-}
-
 /* ---------- 10. 动画 ---------- */
 @keyframes agent-rise {
   from {

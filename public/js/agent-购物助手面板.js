@@ -87,7 +87,6 @@ function injectMarkup() {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 20 4l-4 16-4.5-6.5L4 12Z"/></svg>
         </button>
       </form>
-      <p class="agent-foot">价格与库存来自服务端；下单需要你确认，不会自动扣款。</p>
     </section>
   `;
   document.body.appendChild(root);
@@ -571,7 +570,7 @@ function updateMode(mode) {
     els.mode.textContent = '大模型模式 · ' + (state.model || 'deepseek');
     els.mode.title = '模型回复，工具调用与本地模式共用一套';
   } else {
-    els.mode.textContent = '本地规则模式 · 会话自动保存';
+    els.mode.textContent = '本地规则模式';
     els.mode.title = '没有配置 API Key 时使用内置规则引擎，全部功能离线可用';
   }
 }
@@ -606,10 +605,6 @@ function showWelcome() {
   const msg = createBotMessage(
     '你好，我是小满。可以帮你找商品、比价格、加购物车；选好之后，我会把订单整理成一张确认卡，你点确认才会真正下单。'
   );
-  const hint = document.createElement('p');
-  hint.className = 'agent-action-note';
-  hint.textContent = '试试下面的问题，或者直接说预算和用途。';
-  msg.row.appendChild(hint);
   scrollToBottom(true);
 }
 

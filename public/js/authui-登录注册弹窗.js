@@ -50,7 +50,6 @@ const MODAL_HTML = [
   '          <input class="input" id="authConfirm" type="password" autocomplete="new-password" maxlength="32" placeholder="再输入一次">',
   '        </label>',
   '        <p class="auth-error" id="authError" role="alert" hidden></p>',
-  '        <p class="text-xs text-muted">注册后会自动登录。密码用 scrypt 加盐哈希保存，登录态通过 HttpOnly Cookie 维持。</p>',
   '      </div>',
   '      <div class="modal-foot">',
   '        <button class="btn btn-ghost" type="button" data-close-auth>取消</button>',

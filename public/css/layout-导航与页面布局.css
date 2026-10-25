@@ -181,11 +181,6 @@
   margin-bottom: 0.35rem;
 }
 
-.section-head p {
-  color: var(--muted);
-  font-size: var(--fs-sm);
-}
-
 /* 首页首屏：左文右图，窄屏自动变成上下 */
 .hero {
   display: grid;
@@ -336,13 +331,6 @@
   justify-content: space-between;
   align-items: flex-start;
   padding-block: var(--space-6);
-}
-
-.footer-note {
-  color: var(--muted);
-  font-size: var(--fs-xs);
-  max-width: 42ch;
-  line-height: 1.9;
 }
 
 .footer-links {
