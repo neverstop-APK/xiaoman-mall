@@ -1,0 +1,30 @@
+<aside class="drawer" id="cartDrawer" aria-hidden="true" aria-label="购物车" role="dialog" aria-modal="true">
+    <div class="drawer-head">
+      <h2 class="drawer-title">购物车 <span class="count" id="cartCount">0 件</span></h2>
+      <button class="icon-btn" id="cartCloseBtn" type="button" aria-label="关闭购物车">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <ul id="cartItems" class="drawer-body" style="padding:0;gap:0.75rem"></ul>
+      <div class="empty" id="cartEmpty" hidden>
+        <span class="empty-emoji" aria-hidden="true">🛒</span>
+        <span class="empty-title">购物车还是空的</span>
+        <span class="text-sm">去挑一件顺手的吧，满 99 元包邮</span>
+        <a class="btn btn-ghost" href="./products-全部商品页.html">去逛逛</a>
+      </div>
+    </div>
+
+    <div class="drawer-foot" id="cartFooter" hidden>
+      <div class="shipping-hint" id="cartShippingHint" aria-live="polite"></div>
+      <div class="total-row">
+        <span class="label">合计（不含运费）</span>
+        <span class="amount" id="cartTotal">¥0.00</span>
+      </div>
+      <div class="drawer-actions">
+        <button class="btn btn-ghost" id="cartClearBtn" type="button">清空</button>
+        <button class="btn btn-primary btn-lg" id="cartCheckoutBtn" type="button">去结算</button>
+      </div>
+    </div>
+  </aside>

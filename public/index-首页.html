@@ -167,95 +167,12 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>
-        <a class="brand" href="./index-首页.html"><span class="brand-dot" aria-hidden="true"></span>小满</a>
-      </div>
-      <nav class="footer-links" aria-label="页脚导航">
-        <a href="./index-首页.html#categories">商品分类</a>
-        <a href="./products-全部商品页.html">全部商品</a>
-        <a href="./orders-我的订单页.html">我的订单</a>
-        <a href="./404-页面不存在.html">404 示例</a>
-      </nav>
-    </div>
-  </footer>
+  <!-- include: footer -->
   <!-- ===== 侧拉购物车：默认在屏幕右侧外面，加 .is-open 后滑进来 ===== -->
   <div class="drawer-mask" id="cartMask" aria-hidden="true"></div>
-  <aside class="drawer" id="cartDrawer" aria-hidden="true" aria-label="购物车" role="dialog" aria-modal="true">
-    <div class="drawer-head">
-      <h2 class="drawer-title">购物车 <span class="count" id="cartCount">0 件</span></h2>
-      <button class="icon-btn" id="cartCloseBtn" type="button" aria-label="关闭购物车">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-      </button>
-    </div>
-
-    <div class="drawer-body">
-      <ul id="cartItems" class="drawer-body" style="padding:0;gap:0.75rem"></ul>
-      <div class="empty" id="cartEmpty" hidden>
-        <span class="empty-emoji" aria-hidden="true">🛒</span>
-        <span class="empty-title">购物车还是空的</span>
-        <span class="text-sm">去挑一件顺手的吧，满 99 元包邮</span>
-        <a class="btn btn-ghost" href="./products-全部商品页.html">去逛逛</a>
-      </div>
-    </div>
-
-    <div class="drawer-foot" id="cartFooter" hidden>
-      <div class="shipping-hint" id="cartShippingHint" aria-live="polite"></div>
-      <div class="total-row">
-        <span class="label">合计（不含运费）</span>
-        <span class="amount" id="cartTotal">¥0.00</span>
-      </div>
-      <div class="drawer-actions">
-        <button class="btn btn-ghost" id="cartClearBtn" type="button">清空</button>
-        <button class="btn btn-primary btn-lg" id="cartCheckoutBtn" type="button">去结算</button>
-      </div>
-    </div>
-  </aside>
+  <!-- include: cartdrawer -->
   <!-- ===== 结算弹窗：填收货信息 -> 创建订单 -> 模拟支付 -> 跳结果页 ===== -->
-  <div class="modal-wrap" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
-    <div class="modal">
-      <div class="modal-head">
-        <h2 class="h3" id="checkoutTitle">确认订单</h2>
-        <button class="icon-btn" id="checkoutCloseBtn" type="button" aria-label="关闭">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
-        </button>
-      </div>
-      <form id="checkoutForm" novalidate>
-        <div class="modal-body">
-          <div class="form-grid">
-            <label class="field">
-              <span class="field-label">收货人</span>
-              <input class="input" id="receiverName" maxlength="12" value="王小满" required>
-            </label>
-            <label class="field">
-              <span class="field-label">手机号</span>
-              <input class="input" id="receiverPhone" inputmode="numeric" maxlength="11" value="13800001234" required>
-            </label>
-          </div>
-          <label class="field">
-            <span class="field-label">收货地址</span>
-            <input class="input" id="receiverAddress" value="浙江省杭州市西湖区 小满路 1 号 3 幢 201" required>
-          </label>
-          <label class="field">
-            <span class="field-label">备注（选填）</span>
-            <input class="input" id="orderRemark" maxlength="40" placeholder="例如：工作日送货 / 放门口">
-          </label>
-
-          <div class="checkout-box">
-            <div class="line"><span>商品件数</span><span><strong id="checkoutCount">0</strong> 件</span></div>
-            <div class="line"><span>商品金额</span><span id="checkoutAmount">¥0.00</span></div>
-            <div class="line total"><span>应付金额</span><span class="amount" id="checkoutPayable">¥0.00</span></div>
-            <p class="text-xs text-muted">满 99 元包邮，否则运费 ¥12.00（运费在服务端计算）</p>
-          </div>
-        </div>
-        <div class="modal-foot">
-          <button class="btn btn-ghost" type="button" data-close-checkout>再想想</button>
-          <button class="btn btn-primary" id="checkoutSubmit" type="submit">提交订单并支付</button>
-        </div>
-      </form>
-    </div>
-  </div>
+  <!-- include: checkout -->
 
   <div class="toast-stack" id="toastStack" aria-live="polite"></div>
   <!-- 用 type="module" 加载 ES6 模块：import / export 才能生效 -->

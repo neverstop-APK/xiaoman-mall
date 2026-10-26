@@ -14,6 +14,8 @@
  */
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
+const { renderIncludes } = require('./partials-公共片段');
 
 const PUBLIC_DIR = path.join(__dirname, '..', '..', 'public');
 
@@ -50,22 +52,49 @@ function serveStatic(req, res, pathname) {
   // 2. 防止目录穿越：规范化之后必须仍然在 public 目录里面
   const safeRel = path.normalize(rel).replace(/^[/\\]+/, '');
   const filePath = path.join(PUBLIC_DIR, safeRel);
-  if (!filePath.startsWith(PUBLIC_DIR)) {
+  // 必须比对“目录 + 分隔符”，否则 publicity 这种同级目录也会被 startsWith 放行
+  if (filePath !== PUBLIC_DIR && !filePath.startsWith(PUBLIC_DIR + path.sep)) {
     res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
     return res.end('403 禁止访问');
   }
 
-  // 3. 文件不存在 -> 友好的 404 页面
+  // 3. 文件不存在 -> 友好的 404 页面（404 页也要拼公共页脚）
   if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
     const notFound = path.join(PUBLIC_DIR, NOT_FOUND_PAGE);
-    res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
-    return res.end(fs.existsSync(notFound) ? fs.readFileSync(notFound) : '404 Not Found');
+    const html = fs.existsSync(notFound)
+      ? renderIncludes(fs.readFileSync(notFound, 'utf8'))
+      : '404 Not Found';
+    const body = Buffer.from(html);
+    res.writeHead(404, {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Length': body.length,
+      'Cache-Control': 'no-cache'
+    });
+    return res.end(body);
   }
 
   const ext = path.extname(filePath).toLowerCase();
   const stat = fs.statSync(filePath);
 
-  // 4. 304 缓存：浏览器带了 If-Modified-Since，且文件没变过，就直接说"没变"
+  // 4. HTML 先把公共片段拼进去再返回。
+  //    ETag 用拼装后的内容算，片段改了 ETag 就会变，不会出现“页面没改、页脚还是旧的”。
+  if (ext === '.html') {
+    const body = Buffer.from(renderIncludes(fs.readFileSync(filePath, 'utf8')));
+    const etag = '"' + crypto.createHash('sha1').update(body).digest('hex') + '"';
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, { ETag: etag });
+      return res.end();
+    }
+    res.writeHead(200, {
+      'Content-Type': MIME['.html'],
+      'Content-Length': body.length,
+      'Cache-Control': 'no-cache',
+      ETag: etag
+    });
+    return res.end(body);
+  }
+
+  // 5. 其它静态文件：浏览器带了 If-Modified-Since，且文件没变过，就直接说"没变"
   const since = req.headers['if-modified-since'];
   if (since && new Date(since).getTime() >= Math.floor(stat.mtimeMs / 1000) * 1000) {
     res.writeHead(304);
@@ -76,8 +105,8 @@ function serveStatic(req, res, pathname) {
     'Content-Type': MIME[ext] || 'application/octet-stream',
     'Content-Length': stat.size,
     'Last-Modified': stat.mtime.toUTCString(),
-    // 开发阶段 HTML 不缓存，改完刷新就能看到
-    'Cache-Control': ext === '.html' ? 'no-cache' : 'public, max-age=300'
+    // CSS/JS/图片给 5 分钟缓存；HTML 在上面单独走 no-cache + ETag
+    'Cache-Control': 'public, max-age=300'
   });
   fs.createReadStream(filePath).pipe(res);
 }

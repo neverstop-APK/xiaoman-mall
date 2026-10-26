@@ -17,7 +17,8 @@
   position: fixed;
   right: clamp(0.9rem, 2.6vw, 1.8rem);
   bottom: clamp(0.9rem, 2.6vw, 1.8rem);
-  z-index: 95;
+  /* 低于购物车抽屉(70)和结算弹窗(80)：抽屉打开时按钮不能盖住“去结算” */
+  z-index: 55;
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;

@@ -1,0 +1,43 @@
+<div class="modal-wrap" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 class="h3" id="checkoutTitle">确认订单</h2>
+        <button class="icon-btn" id="checkoutCloseBtn" type="button" aria-label="关闭">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <form id="checkoutForm" novalidate>
+        <div class="modal-body">
+          <div class="form-grid">
+            <label class="field">
+              <span class="field-label">收货人</span>
+              <input class="input" id="receiverName" maxlength="12" value="王小满" required>
+            </label>
+            <label class="field">
+              <span class="field-label">手机号</span>
+              <input class="input" id="receiverPhone" inputmode="numeric" maxlength="11" value="13800001234" required>
+            </label>
+          </div>
+          <label class="field">
+            <span class="field-label">收货地址</span>
+            <input class="input" id="receiverAddress" value="浙江省杭州市西湖区 小满路 1 号 3 幢 201" required>
+          </label>
+          <label class="field">
+            <span class="field-label">备注（选填）</span>
+            <input class="input" id="orderRemark" maxlength="40" placeholder="例如：工作日送货 / 放门口">
+          </label>
+
+          <div class="checkout-box">
+            <div class="line"><span>商品件数</span><span><strong id="checkoutCount">0</strong> 件</span></div>
+            <div class="line"><span>商品金额</span><span id="checkoutAmount">¥0.00</span></div>
+            <div class="line total"><span>应付金额</span><span class="amount" id="checkoutPayable">¥0.00</span></div>
+            <p class="text-xs text-muted">满 99 元包邮，否则运费 ¥12.00（运费在服务端计算）</p>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" type="button" data-close-checkout>再想想</button>
+          <button class="btn btn-primary" id="checkoutSubmit" type="submit">提交订单并支付</button>
+        </div>
+      </form>
+    </div>
+  </div>

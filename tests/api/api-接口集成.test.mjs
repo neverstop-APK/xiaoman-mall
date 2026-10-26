@@ -215,6 +215,23 @@ test('健康检查：真实进程启动、隔离数据目录、local 模式', as
   assert.equal(json.data.status, 'ok');
   assert.equal(json.data.mode, 'local');
   assert.match(json.data.version, /^\d+\.\d+\.\d+$/);
+
+  // 静态页由服务端拼公共片段：首页应有一个页脚/购物车/结算弹窗，且不能把 include 标记漏给浏览器
+  const home = await fetch(BASE + '/');
+  const html = await home.text();
+  assert.equal(home.status, 200);
+  assert.ok(!html.includes('<!-- include:'), '页面返回前应已替换 include 标记');
+  assert.equal((html.match(/<footer class="site-footer">/g) || []).length, 1);
+  assert.equal((html.match(/id="cartDrawer"/g) || []).length, 1);
+  assert.equal((html.match(/id="checkoutModal"/g) || []).length, 1);
+  assert.ok(html.includes('id="cartShippingHint"'), '公共购物车应包含运费提示节点');
+
+  // 404 页只拼页脚，不能把购物车/结算弹窗也塞进去
+  const missing = await fetch(BASE + '/definitely-not-a-page');
+  const missingHtml = await missing.text();
+  assert.equal(missing.status, 404);
+  assert.equal((missingHtml.match(/<footer class="site-footer">/g) || []).length, 1);
+  assert.ok(!missingHtml.includes('id="cartDrawer"'));
 });
 
 test('商品列表、关键词/分类/价格筛选、排序与非法参数', async () => {

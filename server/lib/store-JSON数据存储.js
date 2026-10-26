@@ -71,7 +71,10 @@ function read(table, fallback) {
     write(table, fallback);
     return cache.get(table);
   }
-  const data = JSON.parse(withRetry(() => fs.readFileSync(file, 'utf8')));
+  // 有些编辑器/脚本会在文件头写 UTF-8 BOM（\uFEFF），JSON.parse 不认识它；
+  // 读的时候统一剥掉，避免“文件看起来是 []，服务却报 Unexpected token”。
+  const raw = withRetry(() => fs.readFileSync(file, 'utf8')).replace(/^\uFEFF/, '');
+  const data = JSON.parse(raw);
   cache.set(table, data);
   return data;
 }
