@@ -75,6 +75,9 @@ function serveStatic(req, res, pathname) {
 
   const ext = path.extname(filePath).toLowerCase();
   const stat = fs.statSync(filePath);
+  // 直接访问 404 示例页时也要返回 404，而不是 200；
+  // 否则搜索引擎和监控会把错误页当成正常页面收录。
+  const isNotFoundPage = rel === NOT_FOUND_PAGE;
 
   // 4. HTML 先把公共片段拼进去再返回。
   //    ETag 用拼装后的内容算，片段改了 ETag 就会变，不会出现“页面没改、页脚还是旧的”。
@@ -85,7 +88,7 @@ function serveStatic(req, res, pathname) {
       res.writeHead(304, { ETag: etag });
       return res.end();
     }
-    res.writeHead(200, {
+    res.writeHead(isNotFoundPage ? 404 : 200, {
       'Content-Type': MIME['.html'],
       'Content-Length': body.length,
       'Cache-Control': 'no-cache',

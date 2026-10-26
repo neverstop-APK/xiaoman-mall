@@ -232,6 +232,12 @@ test('健康检查：真实进程启动、隔离数据目录、local 模式', as
   assert.equal(missing.status, 404);
   assert.equal((missingHtml.match(/<footer class="site-footer">/g) || []).length, 1);
   assert.ok(!missingHtml.includes('id="cartDrawer"'));
+
+  // 直接访问 404 示例页也要是 404；否则错误页会被当成正常页面
+  const direct404 = await fetch(BASE + '/' + encodeURIComponent('404-页面不存在.html'));
+  assert.equal(direct404.status, 404);
+  const direct404Html = await direct404.text();
+  assert.ok(!direct404Html.includes('id="cartOpenBtn"'), '404 页不应留下点了没反应的购物车按钮');
 });
 
 test('商品列表、关键词/分类/价格筛选、排序与非法参数', async () => {

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./css/components-通用组件样式.css">
   <link rel="stylesheet" href="./css/pages-各页面专属样式.css">
 </head>
-<body>
+<body class="page-404">
   <!-- ===== 顶部导航：图标在 hover 时上浮并变色 ===== -->
   <header class="site-header">
     <div class="container header-inner">
@@ -42,13 +42,6 @@
         <button class="btn btn-primary" type="submit" style="padding:0.35em 0.9em">搜索</button>
       </form>
 
-      <div class="header-actions">
-        <button class="icon-btn" id="cartOpenBtn" type="button" aria-label="打开购物车" aria-controls="cartDrawer">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="10" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
-          <span class="icon-label">购物车</span>
-          <span class="cart-badge" id="cartBadge">0</span>
-        </button>
-      </div>
     </div>
   </header>
   <main class="container notfound">
@@ -62,7 +55,7 @@
   </main>
   <!-- include: footer -->
 
-  <!-- 404 页也复用页头搜索框：提交后带着关键词回首页列表。
+  <!-- 404 页也复用页头搜索框：提交后带着关键词去全部商品页。
        逻辑写在独立文件里，Nginx 的 CSP 才允许加载（script-src 'self'）。 -->
   <script type="module" src="./js/404-页面逻辑.js"></script>
 </body>

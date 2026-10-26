@@ -410,6 +410,11 @@
 }
 
 /* ================= 404 ================= */
+/* 404 页没有购物车按钮，让搜索框靠右，页头左右才平衡 */
+.page-404 .site-header .header-search {
+  margin-left: auto;
+}
+
 .notfound {
   min-height: 72vh;
   display: flex;
